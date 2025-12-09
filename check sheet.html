@@ -1,0 +1,3646 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TealPOS: Support | Электронные чек-листы</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark-1: #0f1419;
+            --dark-2: #1a202c;
+            --dark-3: #2d3748;
+            --dark-4: #4a5568;
+            --light-1: #f7fafc;
+            --light-2: #e2e8f0;
+            --light-3: #cbd5e0;
+            --accent: #8b5cf6;
+            --accent-light: #a78bfa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--dark-1) 0%, var(--dark-2) 100%);
+            color: var(--light-1);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--light-3);
+            max-width: 700px;
+            margin: 0 auto 20px;
+        }
+
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--light-3);
+            margin-top: 5px;
+        }
+
+        /* NAVIGATION */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            background: rgba(30, 41, 59, 0.7);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: 1px solid var(--dark-4);
+            border-radius: 10px;
+            color: var(--light-3);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-tab:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* SEARCH AND FILTERS */
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-box {
+            position: relative;
+            flex-grow: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid var(--dark-4);
+            border-radius: 12px;
+            color: var(--light-1);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-3);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 10px 16px;
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid var(--dark-4);
+            border-radius: 8px;
+            color: var(--light-3);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }    
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* DEVICE GRID */
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .device-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .device-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .device-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary-light);
+        }
+
+        .device-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .device-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .device-card p {
+            font-size: 0.95Rrem;
+            color: var(--light-3);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .device-type {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(59, 130, 246, 0.2);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .device-versions {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin: 15px 0;
+        }
+
+        .version {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--light-3);
+        }
+
+        .version-value {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .device-progress {
+            margin-top: 20px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--light-3);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--dark-3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* CHECKLIST STYLES */
+        .checklist-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .checklist-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .checklist-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .checklist-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .checklist-info {
+            display: flex;
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: var(--light-3);
+            margin-top: 5px;
+        }
+
+        .progress-section {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .progress-label {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--light-1);
+        }
+
+        .progress-count {
+            font-size: 1rem;
+            color: var(--light-3);
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .global-progress {
+            height: 12px;
+            background: var(--dark-3);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .global-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--light-3);
+        }
+
+        .section {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            padding: 20px 25px;
+            background: rgba(45, 55, 72, 0.5);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+            user-select: none;
+        }
+
+        .section-header:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid white;
+            border-radius: 50%;
+            color: white;
+            margin-right: 15px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .section-toggle {
+            margin-left: auto;
+            font-size: 0.9rem;
+            color: var(--light-3);
+            transition: transform 0.3s;
+        }
+
+        .section.active .section-toggle {
+            transform: rotate(180deg);
+        }
+
+        .checkbox-list {
+            list-style: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .section.active .checkbox-list {
+            max-height: 5000px;
+        }
+
+        .checkbox-item {
+            padding: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.95rem;
+        }
+
+        .checkbox-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox-controls {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-button {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .toggle-button button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            min-width: 48px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            background: var(--dark-3);
+            color: var(--light-2);
+        }
+
+        .toggle-button button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .toggle-button .yes.active {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+
+        .toggle-button .no.active {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+        }
+
+        .toggle-button .active {
+            box-shadow: 0 0 0 2px var(--primary-light), 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .checkbox-label {
+            color: var(--light-1);
+            line-height: 1.6;
+            flex: 1;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .expected-result {
+            display: block;
+            color: white;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            font-style: normal;
+            background: rgba(139, 92, 246, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .additional-info {
+            display: block;
+            color: var(--light-3);
+            margin-top: 8px;
+            font-size: 0.85rem;
+            background: rgba(156, 163, 175, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .image-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            gap: 6px;
+        }
+
+        .image-link:hover {
+            background: linear-gradient(135deg, var(--primary-dark), #1d4ed8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            color: white;
+        }
+
+        .comment-section {
+            padding: 15px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .comment-label {
+            font-size: 0.9rem;
+            color: var(--light-3);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 14px;
+            background: var(--dark-3);
+            border: 1px solid var(--dark-4);
+            border-radius: 8px;
+            color: var(--light-1);
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* BUTTONS */
+        .buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark), #1d4ed8);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(30, 41, 59, 0.7);
+            color: var(--light-2);
+            border: 1px solid var(--dark-4);
+        }
+
+        .btn-secondary:hover {
+            background: var(--dark-4);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-back {
+            background: var(--dark-3);
+            color: var(--light-2);
+            border: 1px solid var(--dark-4);
+        }
+
+        .btn-back:hover {
+            background: var(--dark-4);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        /* NOTIFICATIONS */
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 18px 24px;
+            background: rgba(30, 41, 59, 0.95);
+            border-left: 4px solid var(--primary);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            transform: translateX(150%);
+            transition: transform 0.4s ease;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left-color: var(--success);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger);
+        }
+
+        .notification.warning {
+            border-left-color: var(--warning);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification-icon {
+            font-size: 1.5rem;
+        }
+
+        .notification.success .notification-icon {
+            color: var(--success);
+        }
+
+        .notification.error .notification-icon {
+            color: var(--danger);
+        }
+
+        .notification.warning .notification-icon {
+            color: var(--warning);
+        }
+
+        .notification-message {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        /* MODALS */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: var(--light-3);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 14px;
+            background: var(--dark-3);
+            border: 1px solid var(--dark-4);
+            border-radius: 8px;
+            color: var(--light-1);
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+
+        .file-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-upload:hover {
+            background: linear-gradient(135deg, var(--primary-dark), #1d4ed8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px 20px;
+            color: var(--light-3);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1024px) {
+            .device-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header-stats {
+                gap: 15px;
+            }
+            
+            .stat {
+                padding: 12px 18px;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .nav-tab {
+                justify-content: center;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+            
+            .filter-buttons {
+                justify-content: center;
+            }
+            
+            .device-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .checklist-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .checklist-info {
+                justify-content: center;
+            }
+            
+            .checkbox-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .toggle-button {
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                justify-content: center;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .notification {
+                right: 15px;
+                left: 15px;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .checklist-title {
+                font-size: 1.5rem;
+            }
+            
+            .section-header {
+                padding: 16px 20px;
+            }
+            
+            .checkbox-item {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1><i class="fas fa-tasks"></i> TealPOS: Support</h1>
+            <p>Электронные чек-листы устройств • Автосохранение • Комментарии • Изображения</p>
+            <div class="header-stats">
+                <div class="stat">
+                    <div class="stat-value" id="total-devices">6</div>
+                    <div class="stat-label">Устройств</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="completed-checks">0</div>
+                    <div class="stat-label">Выполнено проверок</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="total-items">79</div>
+                    <div class="stat-label">Всего пунктов</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN MENU -->
+        <div id="main-menu" class="main-menu active">
+            <!-- NAVIGATION TABS -->
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="showTab('all')">
+                    <i class="fas fa-th"></i> Все устройства
+                </div>
+                <div class="nav-tab" onclick="showTab('cash')">
+                    <i class="fas fa-cash-register"></i> Кассы
+                </div>
+                <div class="nav-tab" onclick="showTab('peripheral')">
+                    <i class="fas fa-weight-hanging"></i> Периферия
+                </div>
+            </div>
+
+            <!-- CONTROLS -->
+            <div class="controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Поиск устройств...">
+                </div>
+                <div class="filter-buttons">
+                    <div class="filter-btn active" onclick="filterDevices('all')">Все</div>
+                    <div class="filter-btn" onclick="filterDevices('completed')">Завершённые</div>
+                    <div class="filter-btn" onclick="filterDevices('in-progress')">В процессе</div>
+                    <div class="filter-btn" onclick="filterDevices('not-started')">Не начатые</div>
+                </div>
+            </div>
+
+            <!-- DEVICE GRID -->
+            <div class="device-grid">
+                <!-- КСО/ММ -->
+                <div class="device-card" onclick="showChecklist('kso-mm')" data-category="cash" data-status="in-progress">
+                    <div class="device-card-header">
+                        <div>
+                            <h3>КСО/ММ</h3>
+                            <p>Чек-лист для самообслуживания</p>
+                        </div>
+                        <span class="device-type">Касса</span>
+                    </div>
+                    <div class="device-versions">
+                        <div class="version">
+                            <span>Фронтенд:</span>
+                            <span class="version-value blink">1.70.0</span>
+                        </div>
+                        <div class="version">
+                            <span>Бэкенд:</span>
+                            <span class="version-value blink">1.70.0</span>
+                        </div>
+                    </div>
+                    <div class="device-progress">
+                        <div class="progress-info">
+                            <span>Прогресс:</span>
+                            <span id="progress-count-kso-mm">0/14</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-kso-mm-card" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- КСК -->
+                <div class="device-card" onclick="showChecklist('ksk')" data-category="cash" data-status="not-started">
+                    <div class="device-card-header">
+                        <div>
+                            <h3>КСК</h3>
+                            <p>Чек-лист для касс с кассиром</p>
+                        </div>
+                        <span class="device-type">Касса</span>
+                    </div>
+                    <div class="device-versions">
+                        <div class="version">
+                            <span>Фронтенд:</span>
+                            <span class="version-value blink">1.70.0</span>
+                        </div>
+                        <div class="version">
+                            <span>Бэкенд:</span>
+                            <span class="version-value">1013</span>
+                        </div>
+                    </div>
+                    <div class="device-progress">
+                        <div class="progress-info">
+                            <span>Прогресс:</span>
+                            <span id="progress-count-ksk">0/16</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-ksk-card" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- КСК Даркстор -->
+                <div class="device-card" onclick="showChecklist('ksk-darkstore')" data-category="cash" data-status="not-started">
+                    <div class="device-card-header">
+                        <div>
+                            <h3>КСК Даркстор</h3>
+                            <p>Чек-лист для дарксторов</p>
+                        </div>
+                        <span class="device-type">Касса</span>
+                    </div>
+                    <div class="device-versions">
+                        <div class="version">
+                            <span>Фронтенд:</span>    
+                            <span class="version-value blink">0.0.0</span>
+                        </div>
+                        <div class="version">
+                            <span>Бэкенд:</span>    
+                            <span class="version-value blink">0.0.0</span>                        
+                        </div>                    
+                    </div>                     
+                    <div class="device-progress">
+                        <div class="progress-info">
+                            <span>Прогресс:</span>
+                            <span id="progress-count-ksk-darkstore">0/16</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-ksk-darkstore-card" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Двухсторонние кассы -->
+                <div class="device-card" onclick="showChecklist('electronic-checklist')" data-category="cash" data-status="not-started">
+                    <div class="device-card-header">
+                        <div>
+                            <h3>Двухсторонние кассы</h3>
+                            <p>Чек-лист для двухсторонних касс</p>
+                        </div>
+                        <span class="device-type">Касса</span>
+                    </div>
+                    <div class="device-versions">
+                        <div class="version">
+                            <span>Фронтенд:</span>
+                            <span class="version-value blink">1.70.0</span>
+                        </div>
+                        <div class="version">
+                            <span>Бэкенд:</span>
+                            <span class="version-value">1013</span>
+                        </div>
+                    </div>
+                    <div class="device-progress">
+                        <div class="progress-info">
+                            <span>Прогресс:</span>
+                            <span id="progress-count-electronic-checklist">0/13</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-electronic-checklist-card" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Весы -->
+                <div class="device-card" onclick="showChecklist('scales')" data-category="peripheral" data-status="not-started">
+                    <div class="device-card-header">
+                        <div>
+                            <h3>Весы</h3>
+                            <p>Чек-лист для весов</p>
+                        </div>
+                        <span class="device-type">Периферия</span>
+                    </div>
+                    <div class="device-versions">
+                        <div class="version">
+                            <span>Фронтенд:</span>
+                            <span class="version-value blink">1.26.0</span>
+                        </div>
+                        <div class="version">
+                            <span>Бэкенд:</span>
+                            <span class="version-value blink">0.0.0</span>
+                        </div>                        
+                    </div>
+                    <div class="device-progress">
+                        <div class="progress-info">
+                            <span>Прогресс:</span>
+                            <span id="progress-count-scales">0/14</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-scales-card" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Этикетировщик -->
+                <div class="device-card" onclick="showChecklist('labeler')" data-category="peripheral" data-status="not-started">
+                    <div class="device-card-header">
+                        <div>
+                            <h3>Этикетировщик</h3>
+                            <p>Чек-лист для этикетировщика</p>
+                        </div>
+                        <span class="device-type">Периферия</span>
+                    </div>
+                    <div class="device-versions">
+                        <div class="version">
+                            <span>Фронтенд:</span>
+                            <span class="version-value blink">1.26.0</span>
+                        </div>
+                        <div class="version">
+                            <span>Бэкенд:</span>
+                            <span class="version-value blink">0.0.0</span>
+                        </div>                        
+                    </div>
+                    <div class="device-progress">
+                        <div class="progress-info">
+                            <span>Прогресс:</span>
+                            <span id="progress-count-labeler">0/6</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-labeler-card" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!-- КСО/ММ Чек-лист -->
+<div id="kso-mm" class="checklist-container">
+    <div class="checklist-header">
+        <div>
+            <h2 class="checklist-title"><i class="fas fa-cash-register"></i> КСО/ММ</h2>
+            <p>Чек-лист для самообслуживания</p>
+        </div>
+        <div class="checklist-info">
+            <div class="info-item">
+                <div class="info-value blink">1.70.0</div>
+                <div class="info-label">Фронтенд</div>
+            </div>
+            <div class="info-item">
+                <div class="info-value blink">1.70.0</div>
+                <div class="info-label">Бэкенд</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-label">Проверка готовности КСО/ММ</div>
+            <div class="progress-count" id="progressCount-kso-mm">0 из 19</div>
+        </div>
+        <div class="global-progress">
+            <div class="global-progress-fill" id="progress-kso-mm" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">1</span>
+            Общая проверка кассы
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item1', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item1', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1QrWqpMAf-Q1Dti04M4Jlbr0XnXUVrtps/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.1. Провести полный цикл покупки — выбор товара, оплата, печать чека<br><span class="expected-result">Ожидаемый результат: Процесс выполняется без ошибок, интерфейс реагирует корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item1" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item1" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item2', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item2', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/18uV1qEwEqFhQ739SyPIlZq4D6T9Hxo7Y/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.2. Проверить корректность отображения элементов интерфейса (кнопки, блоки, изображения, тексты)<br><span class="expected-result">Ожидаемый результат: Все элементы отображаются корректно, шрифты и цвета соответствуют стандартам</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item2" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item2" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item3', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item3', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1Fhrt6s2jnC_QUcm7tPXZ4mu-cFwUEH1A/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.3. Проверить версии фронтенда и бэкенда в системной информации<br><span class="expected-result">Ожидаемый результат: Версии соответствуют последним актуальным билдам (указать версии в комментарии)</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item3" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item3" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item4', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item4', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/17Nu6R2_JGy1NKa3HGupg87rRI698Cgcu/view?usp=sharing" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.4. Проверить, отображается ли баннер на МФЭ (например, рекламный или системный)<br><span class="expected-result">Ожидаемый результат: Баннер отображается корректно, без обрезаний и зависаний</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item4" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item4" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item4', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item4', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1-Qpf4pIwwmTxPjTIWQPNPF-Ywfb_IPPj/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.5. Проверить отображение и функциональность основных элементов главного экрана: кнопка "Позвать на помощь", "Весовые товары", "Поиск товаров" иных горячих кнопок в соответствии с актуальными обновлениями системы<br><span class="expected-result">Ожидаемый результат: Все основные элементы интерфейса отображаются корректно, горячие кнопки доступны и функционируют в соответствии с текущей версией системы</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item4" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item4" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">2</span>
+            Проверка каталога товаров
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item5', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item5', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1C7KwTocP4W7FppVcrfGtN4a6RHYT2sgI/view?usp=sharing" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.1. Открыть каталог и убедиться, что товары присутствуют, корректно отображаются: название, цена<br><span class="expected-result">Ожидаемый результат: Все товары корректно отображаются в списке</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item5" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item5" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item6', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item6', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1IrHpXNLVI8IW3brA_Hbmuh099dkEZY1W/view?usp=sharing" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.2. Проверить наличие и корректность отображения весовых товаров (картинка, название, цена)<br><span class="expected-result">Ожидаемый результат: Весовые товары отображаются корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item6" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item6" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item7', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item7', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1vB0ewvZ7GnsTKmzBrIYQTzeft-Tn_XFT/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.3. Если в каталоге присутствует только "Подписка на скидку", добавить в /etc/tpos-uisrv/uisrv.conf параметр ONLY_IN_STOCK_WEIGHT_PRODUCTS="false", перезапустить UI и проверить каталог<br><span class="expected-result">Ожидаемый результат: После изменения настройки — товары появились. После теста настройку откатить и закрыть заявку</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item7" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item7" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">3</span>
+            Добавление товаров и работа с корзиной
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item8', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item8', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1hDmOFDcWEvS6upOsgNv1runiIZu7QnOh/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.1. Добавить штучный товар из каталога в корзину, проверить отображение кнопок "+"/"-" для изменения количества<br><span class="expected-result">Ожидаемый результат: В чеке отображается корректное название, количество и цена. Кнопки "+"/"-" активны и работают</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item8" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item8" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item17', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item17', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1iC2zbWw5bmYzrVHKVNecNOESAwBvoUED/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.2. Добавить весовой товар в корзину, проверить отображение только кнопки корзины (без кнопок "+"/"-")<br><span class="expected-result">Ожидаемый результат: Весовой товар добавлен, отображается только иконка корзины, кнопки изменения количества отсутствуют</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item17" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item17" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item18', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item18', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/142q_aSkvvGccENeeNB9uNjsT8RLNhh4Y/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.3. Добавить маркированный товар в корзину, проверить отображение только кнопки удаления (без кнопок "+"/"-")<br><span class="expected-result">Ожидаемый результат: Маркированный товар добавлен, отображается только кнопка удаления, кнопки изменения количества отсутствуют</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item18" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item18" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">4</span>
+            Проверка авторизации клиента
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item9', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item9', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1SQbvrRV4UfygJgZCqR0QKHg8DrYUhL5y/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.1. Авторизуйте карту по номеру J806854, выберите переключатель «Выбор авторизации» и войдите в систему лояльности<br><span class="expected-result">Ожидаемый результат: Авторизация проходит успешно, номер карты отображается на экране корзины, отображается плашка ЛП</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item9" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item9" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item19', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item19', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1rkbbrF_ulT2_4GbgNMSpsugDfu-Utk7v/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.2. Авторизовать карту по номеру телефона, например 9123123122, выберите переключатель «Выбор авторизации» и войдите в систему лояльности <br><span class="expected-result">Ожидаемый результат: Авторизация проходит успешно, номер карты отображается на экране корзины, отображается плашка ЛП</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item19" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item19" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item20', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item20', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1FDs87ZpvoUB4DHWBuVYdAWv3J48ra2dP/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.3. Авторизовать карту через QR-код в приложении (при наличии)<br><span class="expected-result">Ожидаемый результат: Авторизация проходит успешно, номер карты отображается на экране корзины, отображается плашка ЛП</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item20" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item20" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">5</span>
+            Проверка оплаты
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item10', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item10', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1CbNZwtiVttah0JCCBOczmwWMqlQIrHpl/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">5.1. Перейти на экран оплаты и проверить наличие способов: Плати QR, СБП, банковская карта, СберУлыбка, EshPay<br><span class="expected-result">Ожидаемый результат: Все способы оплаты присутствуют и активны</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item10" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item10" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item21', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item21', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">5.2. Проверить кликабельность всех способов оплаты и возможность выхода из экрана оплаты<br><span class="expected-result">Ожидаемый результат: Все кнопки способов оплаты кликабельны, кнопка "Назад" возвращает в корзину без ошибок</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item21" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item21" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">6</span>
+            Проверка списания бонусов
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item11', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item11', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1GtnXVhtNzqwsPlctRJjW1yHxQoxOqj8W/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">6.1. Авторизовать карту J806854, добавить товар на сумму, превышающую доступные бонусы. На экране оплаты нажать "Списание всех бонусов"<br><span class="expected-result">Ожидаемый результат: Применена скидка, сумма чека уменьшилась на доступное количество бонусов</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item11" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item11" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item12', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item12', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1th-9GYCqfvT2XG7Jy4wmem4BbIyPkRQ2/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">6.2. На экране оплаты нажать "Выбрать количество", ввести меньшее количество бонусов, чем доступно<br><span class="expected-result">Ожидаемый результат: Скидка применилась, сумма чека уменьшилась на введённую сумму</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item12" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item12" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">7</span>
+            Завершение проверки
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item13', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item13', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1Bb4Tbqbu6n4bMtTJUl7MqyGyKa8SQbSR/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">7.1. Завершить оплату и убедиться, что чек напечатан корректно, данные отображаются полностью<br><span class="expected-result">Ожидаемый результат: Чек печатается без ошибок, форматирование корректное</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item13" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item13" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'kso-mm-item22', true, 'kso-mm')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'kso-mm-item22', false, 'kso-mm')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1j81vec5E4Ei72KAxRK7TJFVGJij5ZuqU/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">7.2. Проверить отображение послеоплатного экрана (рейтинг/благодарность) после успешной оплаты<br><span class="expected-result">Ожидаемый результат: После оплаты отображается экран с рейтингом или благодарностью за покупку</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-kso-mm-item22" placeholder="Введите комментарий..."></textarea>
+                </div>
+                <img id="kso-mm-item22" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="buttons">
+        <button class="btn btn-back" onclick="backToMain()">
+            <i class="fas fa-arrow-left"></i> Назад к устройствам
+        </button>
+        <button class="btn btn-secondary" onclick="resetChecklist('kso-mm')">
+            <i class="fas fa-redo"></i> Сбросить чек-лист
+        </button>
+        <button class="btn btn-primary" onclick="exportReport('kso-mm')">
+            <i class="fas fa-file-export"></i> Выгрузить отчет
+        </button>
+    </div>
+</div>
+
+<!-- КСК Чек-лист -->
+<div id="ksk" class="checklist-container">
+    <div class="checklist-header">
+        <div>
+            <h2 class="checklist-title"><i class="fas fa-cash-register"></i> КСК</h2>
+            <p>Чек-лист для касс самообслуживания</p>
+        </div>
+        <div class="checklist-info">
+            <div class="info-item">
+                <div class="info-value blink">1.70.0</div>
+                <div class="info-label">Фронтенд</div>
+            </div>
+            <div class="info-item">
+                <div class="info-value">1013</div>
+                <div class="info-label">Бэкенд</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-label">Проверка готовности КСК</div>
+            <div class="progress-count" id="progressCount-ksk">0 из 16</div>
+        </div>
+        <div class="global-progress">
+            <div class="global-progress-fill" id="progress-ksk" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">1</span>
+            Общая проверка кассы
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item1', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item1', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1KyZ_5hzGBKX_1fr2IJH_uWF_6qGguG2X/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.1. Провести полный цикл обслуживания покупателя — добавление товара, расчет, печать чека<br><span class="expected-result">Ожидаемый результат: Процесс выполняется без ошибок, интерфейс реагирует корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item1" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item1" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item2', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item2', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1WQu_CsxNRWZ1giXKWGMqzDPTzP4fyWYm/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.2. Проверить расположение и отображение элементов интерфейса (кнопки, панели, индикаторы, иконки)<br><span class="expected-result">Ожидаемый результат: Все элементы присутствуют, корректно расположены и читаемы</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item2" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item2" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item3', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item3', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1hE_HoOfbGHKMgfxP8rFdAw5hf5K0DkJf/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.3. Проверить, отображается ли баннер (рекламный, системный или приветственный) на экране покупателя<br><span class="expected-result">Ожидаемый результат: Баннер отображается корректно, без смещения или искажений</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item3" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item3" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item4', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item4', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1ri_mvF6V4PZ7JZiNpvTfPkzRFvk_qTcj/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.4. Проверить версии фронтенда и бэкенда в системной информации<br><span class="expected-result">Ожидаемый результат: Версии соответствуют актуальным релизам</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item4" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item4" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">2</span>
+            Проверка авторизации кассира
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item5', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item5', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1KVTZi7KXgBtrGuvWEYT47KyQ-sHvGjcB/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.1. Выполнить вход под пользователем "администратор БД"<br><span class="expected-result">Ожидаемый результат: Авторизация успешна, система переходит в режим кассира</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item5" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item5" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item6', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item6', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.2. Проверить, что в настройках указано устройство типа "Обычная касса"<br><span class="expected-result">Ожидаемый результат: Тип устройства выбран корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item6" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item6" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">3</span>
+            Проверка каталога товаров
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item7', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item7', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1XaFuXMSSxXW5Bs8tfAQRWvJUlPIA339G/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.1. Проверить наличие товаров в каталоге: название, цена, корректность отображения<br><span class="expected-result">Ожидаемый результат: Все товары отображаются корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item7" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item7" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item8', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item8', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/153O66oCIVTvX_opUambMxpPFm-iKpDlY/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.2. Проверить наличие весовых товаров: картинка, название, цена<br><span class="expected-result">Ожидаемый результат: Весовые товары присутствуют и отображаются корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item8" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item8" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item9', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item9', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1vB0ewvZ7GnsTKmzBrIYQTzeft-Tn_XFT/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.3. Если в каталоге отображается только "Подписка на скидку", добавить в /etc/tpos-uisrv/uisrv.conf параметр ONLY_IN_STOCK_WEIGHT_PRODUCTS="false", перезапустить UI и проверить наличие товаров<br><span class="expected-result">Ожидаемый результат: После изменения настройки товары появились. После теста откатить настройку и закрыть заявку</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item9" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item9" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">4</span>
+            Работа с чеком
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item10', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item10', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/18TxgcJK74cG0RGqwWVQLY7TgR1R8lXZy/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.1. Добавить товар из каталога в чек<br><span class="expected-result">Ожидаемый результат: В чеке корректно отображаются название, количество и цена</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item10" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item10" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item11', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item11', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1FbvTmtXBasi7q-u36qF1Ff0DN19m-zbm/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.2. Удалить товар из чека<br><span class="expected-result">Ожидаемый результат: Сумма чека обновляется корректно, интерфейс реагирует без ошибок</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item11" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item11" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">5</span>
+            Проверка авторизации карты покупателя
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item12', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item12', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1sWNEX0qK6EA48fYiljPuZolXs-g1UOUZ/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">5.1. Авторизовать карту J806854 (код из SMS 1006, телефон 9123123122) любым из доступных способов<br><span class="expected-result">Ожидаемый результат: Авторизация проходит успешно, номер карты отображается в корзине</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item12" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item12" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">6</span>
+            Проверка способов оплаты
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item13', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item13', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1lPAcduusxSpn3rw1q0sa0qa1gHFFgt8X/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">6.1. Перейти на экран оплаты и убедиться, что доступны основные способы: Сертификат/карта; Купон; Бонусы; EshPay; QR СПБ; Наличные; Банк<br><span class="expected-result">Ожидаемый результат: Все способы отображаются корректно, и каждый метод доступен для выбора</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item13" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item13" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item14', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item14', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1R0evdfgXxaPXqWJw5u8dc0uOrC44cBRn/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">6.2. Провести оплату банковской картой через терминал<br><span class="expected-result">Ожидаемый результат: Операция проходит успешно, чек фискализируется, на экране отображается сообщение об успешной оплате</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item14" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item14" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item15', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item15', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1KDgLWajlE1IwOc0jVZWO-HMMBcZOh7Yd/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">6.3. Выбрать оплату по QR или через систему быстрых платежей<br><span class="expected-result">Ожидаемый результат: QR-код отображается корректно, оплата проходит успешно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item15" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item15" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">7</span>
+            Проверка функционала бонусной программы
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-item16', true, 'ksk')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-item16', false, 'ksk')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/131-EEMr0rChHDnEqeuIg6gkgOQhYjoMw/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">7.1. Добавить товар в чек. Авторизовать карту J806854 (код из SMS 1006, телефон 9123123122) по номеру карты. Перейти в раздел "Расчет", нажать «Бонусы».<br><span class="expected-result">Ожидаемый результат: В окне с оплатами отображается строка с оплатой бонусами, сумма бонусов корректна</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-item16" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-item16" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="buttons">
+        <button class="btn btn-back" onclick="backToMain()">
+            <i class="fas fa-arrow-left"></i> Назад к устройствам
+        </button>
+        <button class="btn btn-secondary" onclick="resetChecklist('ksk')">
+            <i class="fas fa-redo"></i> Сбросить чек-лист
+        </button>
+        <button class="btn btn-primary" onclick="exportReport('ksk')">
+            <i class="fas fa-file-export"></i> Выгрузить отчет
+        </button>
+    </div>
+</div>
+
+<!-- КСК Даркстор Чек-лист -->
+<div id="ksk-darkstore" class="checklist-container">
+    <div class="checklist-header">
+        <div>
+            <h2 class="checklist-title"><i class="fas fa-cash-register"></i> КСК Даркстор</h2>
+            <p>Чек-лист для дарксторов</p>
+        </div>
+        <div class="checklist-info">
+            <div class="info-item">
+                <div class="info-value blink">1.70.0</div>
+                <div class="info-label">Фронтенд</div>
+            </div>
+            <div class="info-item">
+                <div class="info-value">1013</div>
+                <div class="info-label">Бэкенд</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-label">Проверка готовности КСК "Даркстор"</div>
+            <div class="progress-count" id="progressCount-ksk-darkstore">0 из 16</div>
+        </div>
+        <div class="global-progress">
+            <div class="global-progress-fill" id="progress-ksk-darkstore" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">1</span>
+            Общая проверка кассы
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item1', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item1', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.1. Провести стандартный цикл обслуживания покупателя — добавить товар, перейти к оплате, завершить покупку, распечатать чек<br><span class="expected-result">Ожидаемый результат: Все действия выполняются без ошибок, интерфейс реагирует корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item1" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item1" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item2', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item2', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.2. Проверить корректность расположения и отображения элементов интерфейса (кнопки, вкладки, иконки, тексты)<br><span class="expected-result">Ожидаемый результат: Все элементы интерфейса присутствуют, отображаются корректно, нет сдвигов и артефактов</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item2" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item2" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item3', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item3', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.3. Проверить версии фронтенда и бэкенда в системной информации<br><span class="expected-result">Ожидаемый результат: Версии соответствуют актуальным релизам</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item3" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item3" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <!-- Новые секции, перенесенные из второго документа -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">2</span>
+            Проверка авторизации кассира
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item4', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item4', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.1. Выполнить вход под пользователем "администратор БД"<br><span class="expected-result">Ожидаемый результат: Авторизация проходит успешно, система переходит в рабочий режим</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item4" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item4" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item5', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item5', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.2. Проверить, что в настройках указано устройство типа "Обычная касса"<br><span class="expected-result">Ожидаемый результат: Тип устройства выбран корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item5" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item5" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">3</span>
+            Проверка каталога товаров
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item6', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item6', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.1. Проверить наличие товаров в каталоге (название, цена). Если в каталоге присутствует только "Подписка на скидку", добавить параметр ONLY_IN_STOCK_WEIGHT_PRODUCTS="false" в файл /etc/tpos-uisrv/uisrv.conf, перезапустить UI и подождать 2–3 минуты<br><span class="expected-result">Ожидаемый результат: После добавления параметра товары появляются в каталоге. После проверки вернуть настройку в исходное состояние и закрыть заявку</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item6" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item6" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item7', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item7', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.2. Проверить наличие весовых товаров — изображение, название, цена<br><span class="expected-result">Ожидаемый результат: Весовые товары отображаются корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item7" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item7" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">4</span>
+            Работа с чеком
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item8', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item8', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.1. Добавить товар из каталога в чек<br><span class="expected-result">Ожидаемый результат: В чеке корректно отображаются название, количество и цена</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item8" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item8" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item9', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item9', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.2. Удалить товар из чека<br><span class="expected-result">Ожидаемый результат: Сумма пересчитывается корректно, интерфейс обновляется без ошибок</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item9" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item9" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">5</span>
+            Проверка авторизации карты покупателя
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item10', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item10', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">5.1. Авторизовать карту J806854 (код из SMS: 1006, телефон 9123123122) по номеру телефона или карты<br><span class="expected-result">Ожидаемый результат: Авторизация проходит успешно, номер карты отображается на экране корзины</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item10" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item10" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">6</span>
+            Проверка способов оплаты
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item11', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item11', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">6.1. Перейти к экрану оплаты и убедиться, что доступны основные способы: Плати QR, СБП, оплата из мобильного приложения, банковская карта (если подключён эквайринг), СберУлыбка (если подключён эквайринг)<br><span class="expected-result">Ожидаемый результат: Все активные способы оплаты отображаются и работают корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item11" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item11" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item12', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item12', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">6.2. Провести оплату через систему быстрых платежей или QR-код<br><span class="expected-result">Ожидаемый результат: QR-код формируется корректно, оплата проходит успешно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item12" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item12" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item13', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item13', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">6.3. Провести оплату банковской картой<br><span class="expected-result">Ожидаемый результат: Операция выполняется корректно, чек фискализируется, отображается подтверждение оплаты</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item13" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item13" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">7</span>
+            Проверка функционала бонусов
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item14', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item14', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">7.1. Добавить товар в чек. Авторизовать карту J806854 (код из SMS: 1006, телефон 9123123122) по номеру карты. Перейти к оплате ("Расчёт") и нажать кнопку "Бонусы"<br><span class="expected-result">Ожидаемый результат: Отображается окно ввода кода из SMS, что подтверждает доступность бонусной авторизации</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item14" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item14" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item15', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item15', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">7.2. Ввести сумму бонусов меньше доступной<br><span class="expected-result">Ожидаемый результат: Скидка применяется корректно, сумма чека уменьшается на введённую сумму</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item15" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item15" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">8</span>
+            Завершение проверки
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'ksk-darkstore-item16', true, 'ksk-darkstore')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'ksk-darkstore-item16', false, 'ksk-darkstore')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">8.1. Убедиться, что после всех операций касса функционирует стабильно, без зависаний и ошибок<br><span class="expected-result">Ожидаемый результат: Система работает корректно, все сервисы активны</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-ksk-darkstore-item16" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="ksk-darkstore-item16" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="buttons">
+        <button class="btn btn-back" onclick="backToMain()">
+            <i class="fas fa-arrow-left"></i> Назад к устройствам
+        </button>
+        <button class="btn btn-secondary" onclick="resetChecklist('ksk-darkstore')">
+            <i class="fas fa-redo"></i> Сбросить чек-лист
+        </button>
+        <button class="btn btn-primary" onclick="exportReport('ksk-darkstore')">
+            <i class="fas fa-file-export"></i> Выгрузить отчет
+        </button>
+    </div>
+</div>
+
+<!-- Двухсторонние кассы Чек-лист -->
+<div id="electronic-checklist" class="checklist-container">
+    <div class="checklist-header">
+        <div>
+            <h2 class="checklist-title"><i class="fas fa-cash-register"></i> Двухсторонние кассы</h2>
+            <p>Чек-лист для двухсторонних касс</p>
+        </div>
+        <div class="checklist-info">
+            <div class="info-item">
+                <div class="info-value blink">1.70.0</div>
+                <div class="info-label">Фронтенд</div>
+            </div>
+            <div class="info-item">
+                <div class="info-value">1013</div>
+                <div class="info-label">Бэкенд</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-label">Проверка готовности двухсторонних касс</div>
+            <div class="progress-count" id="progressCount-electronic-checklist">0 из 13</div>
+        </div>
+        <div class="global-progress">
+            <div class="global-progress-fill" id="progress-electronic-checklist" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">1</span>
+            Базовые действия покупателя и кассира
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'electronic-item1', true, 'electronic-checklist')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'electronic-item1', false, 'electronic-checklist')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.1. Провести стандартный цикл обслуживания покупателя: добавить товар, рассчитать сумму, распечатать чек<br><span class="expected-result">Ожидаемый результат: Все действия выполняются без ошибок, интерфейс реагирует корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-electronic-item1" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="electronic-item1" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'electronic-item2', true, 'electronic-checklist')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'electronic-item2', false, 'electronic-checklist')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.2. Проверить расположение элементов, наличие всех кнопок и подсказок<br><span class="expected-result">Ожидаемый результат: Интерфейс соответствует макету, все элементы видны</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-electronic-item2" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="electronic-item2" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <!-- Новые секции для двухсторонних касс -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">2</span>
+            Проверка актуальности билдов
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'electronic-item3', true, 'electronic-checklist')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'electronic-item3', false, 'electronic-checklist')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1jNvjtciyu1q6LnGHlGv_9G99XTFR3u23/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.1. Проверить версию фронтенда<br><span class="expected-result">Ожидаемый результат: Версия соответствует актуальному билду</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-electronic-item3" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="electronic-item3" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'electronic-item4', true, 'electronic-checklist')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'electronic-item4', false, 'electronic-checklist')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1jNvjtciyu1q6LnGHlGv_9G99XTFR3u23/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.2. Проверить версию бэкенда<br><span class="expected-result">Ожидаемый результат: Версия соответствует актуальному билду</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-electronic-item4" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="electronic-item4" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">3</span>
+            Проверка экрана «Прочее»
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'electronic-item5', true, 'electronic-checklist')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'electronic-item5', false, 'electronic-checklist')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1IRBJ4te-2XB9a47wy_ziRJu61-ZcruPy/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.1. Ввести штрих-код «999999999007»<br><span class="expected-result">Ожидаемый результат: Откроется экран «Прочее»</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-electronic-item5" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="electronic-item5" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'electronic-item6', true, 'electronic-checklist')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'electronic-item6', false, 'electronic-checklist')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1X4vLu3pVbMBl4WVVqg80SCv-RidoySmO/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.2. Перейти в «Настройки» → «Где кассир может переключить устройства с КСО на КСК»<br><span class="expected-result">Ожидаемый результат: Экран корректно отображает доступные устройства</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-electronic-item6" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="electronic-item6" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'electronic-item7', true, 'electronic-checklist')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'electronic-item7', false, 'electronic-checklist')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1kCBLLQ1dJkKz-HymfNAP8g21WFsCvGe1/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.3. Провести полный цикл переключения между КСК и КСО<br><span class="expected-result">Ожидаемый результат: Переключение выполняется без ошибок, устройство корректно меняет режим</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-electronic-item7" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="electronic-item7" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">4</span>
+            Проверка по пунктам для КСО и КСК
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'electronic-item8', true, 'electronic-checklist')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'electronic-item8', false, 'electronic-checklist')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.1. Проверить все чек-листы и операции для КСО<br><span class="expected-result">Ожидаемый результат: Все операции выполняются корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-electronic-item8" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="electronic-item8" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'electronic-item9', true, 'electronic-checklist')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'electronic-item9', false, 'electronic-checklist')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.2. Проверить все чек-листы и операции для КСК<br><span class="expected-result">Ожидаемый результат: Все операции выполняются корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-electronic-item9" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="electronic-item9" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'electronic-item10', true, 'electronic-checklist')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'electronic-item10', false, 'electronic-checklist')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1X4vLu3pVbMBl4WVVqg80SCv-RidoySmO/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.3. Убедиться, что переключение между КСО и КСК не ломает функционал<br><span class="expected-result">Ожидаемый результат: Все операции выполняются без ошибок</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-electronic-item10" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="electronic-item10" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="buttons">
+        <button class="btn btn-back" onclick="backToMain()">
+            <i class="fas fa-arrow-left"></i> Назад к устройствам
+        </button>
+        <button class="btn btn-secondary" onclick="resetChecklist('electronic-checklist')">
+            <i class="fas fa-redo"></i> Сбросить чек-лист
+        </button>
+        <button class="btn btn-primary" onclick="exportReport('electronic-checklist')">
+            <i class="fas fa-file-export"></i> Выгрузить отчет
+        </button>
+    </div>
+</div>
+
+<!-- Весы Чек-лист -->
+<div id="scales" class="checklist-container">
+    <div class="checklist-header">
+        <div>
+            <h2 class="checklist-title"><i class="fas fa-weight-hanging"></i> Весы</h2>
+            <p>Чек-лист для весов</p>
+        </div>
+        <div class="checklist-info">
+            <div class="info-item">
+                <div class="info-value blink">1.26.0</div>
+                <div class="info-label">Фронтенд</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-label">Проверка готовности Весов</div>
+            <div class="progress-count" id="progressCount-scales">0 из 17</div>
+        </div>
+        <div class="global-progress">
+            <div class="global-progress-fill" id="progress-scales" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">1</span>
+            Общая проверка весов
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item1', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item1', false, 'scales')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.1. Проверить подключение весов к POS-системе<br><span class="expected-result">Ожидаемый результат: Весы определяются системой, индикаторы активны</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item1" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item1" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item2', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item2', false, 'scales')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1vy9ct3QknkumwsXLRvJ2C3jU1cw4a4jm/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.2. Провести тестовое взвешивание товара<br><span class="expected-result">Ожидаемый результат: Масса отображается корректно на экране</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item2" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item2" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item11', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item11', false, 'scales')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1QSonQEjnCMgOGItMCtYzjeNsN11nKILQ/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.3. Визуальная проверка интерфейса на расположение элементов и наличия кнопок<br><span class="expected-result">Ожидаемый результат: Интерфейс интуитивен, все кнопки доступны</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item11" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item11" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item12', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item12', false, 'scales')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1aM_87sS5mvfpGza7hFRbXlceHYc-dri5/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.4. Проверка динамических категорий<br><span class="expected-result">Ожидаемый результат: Категории отображаются и обновляются корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item12" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item12" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <!-- Новые секции для весов -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">2</span>
+            Проверка сборных весов
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item3', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item3', false, 'scales')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1QQ04ZXHUZU56xoy8oxkOo1tcw37w2idh/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.1. Убедиться, что моноблок, весовой модуль и принтер работают под Linux<br><span class="expected-result">Ожидаемый результат: Система загружается без ошибок</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item3" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item3" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item4', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item4', false, 'scales')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.2. Проверить совместимость с КСО и традиционными кассами<br><span class="expected-result">Ожидаемый результат: Интеграция выполнена успешно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item4" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item4" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">3</span>
+            Проверка весов Bizerba
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item5', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item5', false, 'scales')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1xkqyqDW994tqaqWW6Rw6zHNAGsBIZeF0/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.1. Убедиться, что экран оператора, весовой модуль и принтер этикеток работают<br><span class="expected-result">Ожидаемый результат: Все компоненты активны</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item5" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item5" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item6', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item6', false, 'scales')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">3.2. Проверить работу Bizerba Software и интеграцию с TealPOS<br><span class="expected-result">Ожидаемый результат: Данные о взвешивании передаются корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item6" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item6" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">4</span>
+            Проверка весов Штрих-М
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item7', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item7', false, 'scales')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1r80npnCC8SLJawBGD0VG5GOryB0lsxrO/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.1. Убедиться, что устройство работает под Windows<br><span class="expected-result">Ожидаемый результат: Система загружается без ошибок</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item7" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item7" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item8', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item8', false, 'scales')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1r80npnCC8SLJawBGD0VG5GOryB0lsxrO/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">4.2. Проверить модели Штрих РС-200 и Штрих Слим<br><span class="expected-result">Ожидаемый результат: Обе модели функционируют корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item8" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item8" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">5</span>
+            Техническая проверка
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item9', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item9', false, 'scales')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">5.1. Проверить интеграцию через scalesrv и формат обмена данными (JSON/REST или gRPC)<br><span class="expected-result">Ожидаемый результат: Данные передаются без потерь</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item9" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item9" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item10', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item10', false, 'scales')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">5.2. Убедиться в корректности подключения (COM, USB или TCP/IP)<br><span class="expected-result">Ожидаемый результат: Подключение стабильно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item10" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item10" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item13', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item13', false, 'scales')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1ASyN9w5jaYEt_dm6GyHHmzGDYMaxLEWO/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">5.3. Проверка актуальности билдов<br><span class="expected-result">Ожидаемый результат: Все билды обновлены до последней версии</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item13" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item13" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item14', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item14', false, 'scales')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1vaGcgGa8ypBTJPHtrLor36CJLPd2io9D/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">5.4. Проверка корректности заполнения настроек STORE_ID и POS_ID<br><span class="expected-result">Ожидаемый результат: Настройки заполнены корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item14" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item14" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">6</span>
+            Проверка функциональности
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item15', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item15', false, 'scales')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/10Lr3bklxevkR2dh1bVscb2ZmSny05z09/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">6.1. Проверка наличия товаров (картинка, название, ценник)<br><span class="expected-result">Ожидаемый результат: Все данные товаров отображаются корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item15" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item15" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item16', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item16', false, 'scales')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">6.2. Проверка функционала выбора даты производства и производителя (Если весы настроены для работы сотрудника)<br><span class="expected-result">Ожидаемый результат: Функционал работает корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item16" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item16" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'scales-item17', true, 'scales')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'scales-item17', false, 'scales')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1bC5huK5FeTlMlfELgvhgkxfLEotmrkd8/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">6.3. Проверка печати этикетки<br><span class="expected-result">Ожидаемый результат: Этикетка печатается корректно при наличии веса</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-scales-item17" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="scales-item17" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="buttons">
+        <button class="btn btn-back" onclick="backToMain()">
+            <i class="fas fa-arrow-left"></i> Назад к устройствам
+        </button>
+        <button class="btn btn-secondary" onclick="resetChecklist('scales')">
+            <i class="fas fa-redo"></i> Сбросить чек-лист
+        </button>
+        <button class="btn btn-primary" onclick="exportReport('scales')">
+            <i class="fas fa-file-export"></i> Выгрузить отчет
+        </button>
+    </div>
+</div>
+
+<!-- Этикетировщик Чек-лист -->
+<div id="labeler" class="checklist-container">
+    <div class="checklist-header">
+        <div>
+            <h2 class="checklist-title"><i class="fas fa-tag"></i> Этикетировщик</h2>
+            <p>Чек-лист для этикетировщика</p>
+        </div>
+        <div class="checklist-info">
+            <div class="info-item">
+                <div class="info-value blink">1.26.0</div>
+                <div class="info-label">Фронтенд</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-label">Проверка готовности Этикетировщика</div>
+            <div class="progress-count" id="progressCount-labeler">0 из 5</div>
+        </div>
+        <div class="global-progress">
+            <div class="global-progress-fill" id="progress-labeler" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">1</span>
+            Общая проверка этикетировщика
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'labeler-item1', true, 'labeler')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'labeler-item1', false, 'labeler')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1w-f2lIoUrfyc_npHJgIWwWvBScQFkc6m/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.1. Визуальная проверка интерфейса на расположение элементов и наличие кнопок<br><span class="expected-result">Ожидаемый результат: Интерфейс интуитивен, все кнопки доступны</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-labeler-item1" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="labeler-item1" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'labeler-item2', true, 'labeler')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'labeler-item2', false, 'labeler')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1IYEc8S5cQJ3o-nwb58Gkt-O6hsxU_JX4/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">1.2. Проверка актуальности билдов<br><span class="expected-result">Ожидаемый результат: Все билды обновлены до последней версии</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-labeler-item2" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="labeler-item2" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <!-- Новая секция для этикетировщика -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span class="section-number">2</span>
+            Проверка функциональности
+            <span class="section-toggle"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <ul class="checkbox-list">
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'labeler-item3', true, 'labeler')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'labeler-item3', false, 'labeler')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1uUqr_NbujKWF0t-JVbJKJvkrbZ3Xi7p-/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.1. Проверка наличия товаров (название, вес, производитель)<br><span class="expected-result">Ожидаемый результат: Все данные товаров отображаются корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-labeler-item3" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="labeler-item3" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'labeler-item4', true, 'labeler')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'labeler-item4', false, 'labeler')">✖</button>
+                    </div>
+                    <a href="#" class="image-link" onclick="return false;">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.2. Проверка корректности заполнения настроек STORE_ID и POS_ID<br><span class="expected-result">Ожидаемый результат: Настройки заполнены корректно</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-labeler-item4" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="labeler-item4" style="display: none;">
+            </li>
+            <li class="checkbox-item">
+                <div class="checkbox-controls">
+                    <div class="toggle-button">
+                        <button class="yes" onclick="toggleStatus(this, 'labeler-item5', true, 'labeler')">✔</button>
+                        <button class="no" onclick="toggleStatus(this, 'labeler-item5', false, 'labeler')">✖</button>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1hkXFeoUP6d_iVykyxiiI69QzZaoqKngJ/view?usp=drive_link" class="image-link" target="_blank">
+                        <i class="fas fa-camera"></i> Пример выполнения
+                    </a>
+                    <label class="checkbox-label">2.3. Проверка печати этикетки<br><span class="expected-result">Ожидаемый результат: Этикетка печатается корректно при наличии данных</span></label>
+                </div>
+                <div class="comment-section">
+                    <label class="comment-label"><i class="fas fa-comment"></i> Комментарий:</label>
+                    <textarea class="comment-input" id="comment-labeler-item5" placeholder="Введите комментарий... (автосохранение)"></textarea>
+                </div>
+                <img id="labeler-item5" style="display: none;">
+            </li>
+        </ul>
+    </div>
+
+    <div class="buttons">
+        <button class="btn btn-back" onclick="backToMain()">
+            <i class="fas fa-arrow-left"></i> Назад к устройствам
+        </button>
+        <button class="btn btn-secondary" onclick="resetChecklist('labeler')">
+            <i class="fas fa-redo"></i> Сбросить чек-лист
+        </button>
+        <button class="btn btn-primary" onclick="exportReport('labeler')">
+            <i class="fas fa-file-export"></i> Выгрузить отчет
+        </button>
+    </div>
+</div>
+
+        <!-- NOTIFICATION -->
+        <div class="notification" id="notification">
+            <div class="notification-content">
+                <div class="notification-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="notification-message" id="notification-message">Сообщение</div>
+            </div>
+        </div>
+
+        <!-- MODALS -->
+        <div id="uploadModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeUploadModal()">&times;</span>
+                <h3 class="modal-title"><i class="fas fa-camera"></i> Загрузить вложение</h3>
+                <input type="file" id="imageInput" class="file-input" accept="image/*">
+                <button class="btn-upload" onclick="uploadImage()">
+                    <i class="fas fa-upload"></i> Загрузить
+                </button>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>TealPOS Support System • Версия 2.1.0 • <span id="current-year">2023</span></p>
+        </div>
+    </div>
+
+     <script>
+        // Глобальные переменные и состояние
+        let checklistState = {
+            'kso-mm': {},
+            'ksk': {},
+            'ksk-darkstore': {},
+            'electronic-checklist': {},
+            'scales': {},
+            'labeler': {}
+        };
+
+        let currentChecklist = null;
+        let currentItemId = null;
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Всегда начинаем с чистого состояния
+            checklistState = {
+                'kso-mm': {},
+                'ksk': {},
+                'ksk-darkstore': {},
+                'electronic-checklist': {},
+                'scales': {},
+                'labeler': {}
+            };
+            
+            // Устанавливаем текущий год в футере
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // Инициализируем поиск
+            document.getElementById('search-input').addEventListener('input', filterDevicesBySearch);
+            
+            // Показываем уведомление о загрузке
+            showNotification('Система чек-листов готова к работе', 'success');
+        });
+
+        // Функции навигации
+        function showTab(tabName) {
+            // Обновляем активную вкладку
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Показываем/скрываем устройства по категориям
+            const devices = document.querySelectorAll('.device-card');
+            devices.forEach(device => {
+                if (tabName === 'all' || 
+                    (tabName === 'cash' && device.getAttribute('data-category') === 'cash') ||
+                    (tabName === 'peripheral' && device.getAttribute('data-category') === 'peripheral') ||
+                    (tabName === 'recent' && device.getAttribute('data-status') === 'in-progress')) {
+                    device.style.display = 'block';
+                } else {
+                    device.style.display = 'none';
+                }
+            });
+        }
+
+        function filterDevices(filter) {
+            // Обновляем активную кнопку фильтра
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Применяем фильтр
+            const devices = document.querySelectorAll('.device-card');
+            devices.forEach(device => {
+                const progressFill = device.querySelector('.progress-fill');
+                const width = parseInt(progressFill.style.width) || 0;
+                
+                if (filter === 'all' ||
+                    (filter === 'completed' && width === 100) ||
+                    (filter === 'in-progress' && width > 0 && width < 100) ||
+                    (filter === 'not-started' && width === 0)) {
+                    device.style.display = 'block';
+                } else {
+                    device.style.display = 'none';
+                }
+            });
+        }
+
+        function filterDevicesBySearch() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const devices = document.querySelectorAll('.device-card');
+            
+            devices.forEach(device => {
+                const title = device.querySelector('h3').textContent.toLowerCase();
+                const description = device.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    device.style.display = 'block';
+                } else {
+                    device.style.display = 'none';
+                }
+            });
+        }
+
+        // Функции работы с чек-листами
+        function showChecklist(deviceId) {
+            document.querySelectorAll('.checklist-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            document.getElementById('main-menu').classList.remove('active');
+            document.getElementById(deviceId).classList.add('active');
+            
+            currentChecklist = deviceId;
+            
+            showNotification(`Открыт чек-лист: ${document.querySelector(`#${deviceId} .checklist-title`).textContent}`, 'success');
+        }
+
+        function backToMain() {
+            document.querySelectorAll('.checklist-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            document.getElementById('main-menu').classList.add('active');
+            currentChecklist = null;
+        }
+
+        function toggleSection(header) {
+            const section = header.parentElement;
+            section.classList.toggle('active');
+        }
+
+        function toggleStatus(button, itemId, status, deviceId) {
+            const buttons = button.parentElement.querySelectorAll('button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            checklistState[deviceId][itemId] = status;
+            updateProgress(deviceId);
+
+            // Показываем уведомление
+            const action = status ? 'ДА' : 'НЕТ';
+            showNotification(`Пункт отмечен как: ${action}`, status ? 'success' : 'warning');
+        }
+
+        function updateProgress(deviceId) {
+            const completedItems = Object.values(checklistState[deviceId]).filter(val => val === true).length;
+            const totalItems = document.querySelectorAll(`#${deviceId} .toggle-button`).length;
+            const progress = totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
+    
+            // Обновляем прогресс-бар внутри чек-листа
+            const progressBar = document.getElementById(`progress-${deviceId}`);
+            const progressCount = document.getElementById(`progressCount-${deviceId}`);
+            if (progressBar) progressBar.style.width = `${progress}%`;
+            if (progressCount) progressCount.textContent = `${completedItems} из ${totalItems}`;
+
+            // Обновляем карточку устройства
+            updateCardProgress(deviceId);
+
+            // Обновляем общую статистику
+            updateGlobalStats();
+        }
+
+        function updateCardProgress(deviceId) {
+            const completedItems = Object.values(checklistState[deviceId] || {}).filter(val => val === true).length;
+            const totalItems = document.querySelectorAll(`#${deviceId} .toggle-button`).length;
+            
+            const progressFill = document.getElementById(`progress-${deviceId}-card`);
+            const progressCount = document.getElementById(`progress-count-${deviceId}`);
+            
+            if (progressFill && progressCount && totalItems > 0) {
+                const percentage = (completedItems / totalItems) * 100;
+                progressFill.style.width = `${percentage}%`;
+                progressCount.textContent = `${completedItems}/${totalItems}`;
+                
+                // Обновляем статус карточки
+                const card = document.querySelector(`.device-card[onclick="showChecklist('${deviceId}')"]`);
+                if (card) {
+                    if (percentage === 100) {
+                        card.setAttribute('data-status', 'completed');
+                    } else if (percentage > 0) {
+                        card.setAttribute('data-status', 'in-progress');
+                    } else {
+                        card.setAttribute('data-status', 'not-started');
+                    }
+                }
+            }
+        }
+
+        function updateGlobalStats() {
+            let totalCompleted = 0;
+            let totalItems = 0;
+            
+            Object.keys(checklistState).forEach(deviceId => {
+                const completedItems = Object.values(checklistState[deviceId] || {}).filter(val => val === true).length;
+                totalCompleted += completedItems;
+                totalItems += document.querySelectorAll(`#${deviceId} .toggle-button`).length;
+            });
+            
+            document.getElementById('completed-checks').textContent = totalCompleted;
+            document.getElementById('total-items').textContent = totalItems;
+        }
+
+        function resetChecklist(deviceId) {
+            if (confirm('Вы уверены, что хотите сбросить чек-лист?')) {
+                checklistState[deviceId] = {};
+                
+                // Сбрасываем UI
+                document.querySelectorAll(`#${deviceId} .toggle-button button`).forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll(`#${deviceId} .comment-input`).forEach(input => input.value = '');
+                document.querySelectorAll(`#${deviceId} img`).forEach(img => {
+                    img.src = '';
+                    img.style.display = 'none';
+                });
+                
+                updateProgress(deviceId);
+                showNotification('Чек-лист сброшен', 'success');
+            }
+        }
+
+        function exportReport(deviceId) {
+            const report = [];
+            const deviceName = document.querySelector(`#${deviceId} .checklist-title`).textContent;
+            const versions = document.querySelector(`#${deviceId} .checklist-info`)?.textContent || '';
+            
+            document.querySelectorAll(`#${deviceId} .checkbox-item`).forEach(item => {
+                const label = item.querySelector('.checkbox-label').textContent.split('\n')[0];
+                const expectedResult = item.querySelector('.expected-result').textContent;
+                const imgElement = item.querySelector('img');
+                const status = imgElement ? checklistState[deviceId][imgElement.id] : undefined;
+                const comment = item.querySelector('.comment-input').value;
+                const imageSrc = imgElement?.src;
+                
+                // Статус в отчете
+                let statusText;
+                if (status === true) {
+                    statusText = '✔ ДА';
+                } else if (status === false) {
+                    statusText = '✖ НЕТ';
+                } else {
+                    statusText = 'Не отмечено';
+                }
+
+                report.push({
+                    label,
+                    expectedResult,
+                    status: statusText,
+                    comment: comment || 'Без комментариев',
+                    image: imageSrc ? 'Изображение прикреплено' : 'Изображение отсутствует'
+                });
+            });
+
+            const reportText = `
+ОТЧЕТ ПО ЧЕК-ЛИСТУ
+Устройство: ${deviceName}
+${versions}
+Дата создания: ${new Date().toLocaleString('ru-RU')}
+Общий прогресс: ${document.getElementById(`progressCount-${deviceId}`).textContent}
+
+ДЕТАЛЬНЫЕ РЕЗУЛЬТАТЫ:
+${report.map((item, index) => `
+Пункт ${index + 1}: ${item.label}
+${item.expectedResult}
+Статус: ${item.status}
+Комментарий: ${item.comment}
+Изображение: ${item.image}
+`).join('\n')}
+
+Сгенерировано системой TealPOS Support
+            `;
+
+            const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Отчет_${deviceName.replace(/\s+/g, '_')}_${new Date().toLocaleString('ru-RU').replace(/[\s,:]/g, '_')}.txt`;
+            link.click();
+            showNotification('Отчет успешно выгружен', 'success');
+        }
+
+        // Уведомления
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            const messageEl = document.getElementById('notification-message');
+            const icon = notification.querySelector('.notification-icon i');
+            
+            messageEl.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
+            
+            // Устанавливаем соответствующую иконку
+            if (type === 'success') {
+                icon.className = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                icon.className = 'fas fa-exclamation-circle';
+            } else if (type === 'warning') {
+                icon.className = 'fas fa-exclamation-triangle';
+            } else {
+                icon.className = 'fas fa-info-circle';
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        // Модальные окна
+        function openUploadModal(itemId) {
+            currentItemId = itemId;
+            document.getElementById('uploadModal').style.display = 'flex';
+            document.getElementById('imageInput').value = '';
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+            currentItemId = null;
+        }
+
+        function uploadImage() {
+            const input = document.getElementById('imageInput');
+            if (input.files && input.files[0] && currentItemId) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(currentItemId);
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    closeUploadModal();
+                    showNotification('Изображение успешно загружено', 'success');
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                showNotification('Пожалуйста, выберите файл', 'warning');
+            }
+        }
+
+        // Закрытие модальных окон при клике вне их
+        window.onclick = function(event) {
+            const modal = document.getElementById('uploadModal');
+            if (event.target === modal) {
+                closeUploadModal();
+            }
+        }
+    </script>
