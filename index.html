@@ -153,54 +153,127 @@
                 </div>
             </div>
 
-            <!-- Кейс 3: Интерактивные инструменты -->
-            <div class="tab-content" id="case3">
-                <div class="case-content">
-                    <div class="case-text">
-                        <h3>Интерактивные инструменты поддержки</h3>
-                        <p><strong>Задача:</strong> Ускорить обработку типовых запросов службы поддержки.</p>
-                        <p><strong>Решение:</strong></p>
-                        <ul>
-                            <li>Создание интерактивных чек-листов на HTML/CSS/JS</li>
-                            <li>Интеграция с REST API для валидации</li>
-                            <li>Адаптивный дизайн для мобильных устройств</li>
-                        </ul>
-                        <p><strong>Результат:</strong> Сокращение времени на рутинные операции на 30%.</p>
-                        <div class="tech-tags">
-                            <span>HTML/CSS/JS</span>
-                            <span>REST API</span>
-                            <span>Interactive Guides</span>
+<div class="tab-content" id="case3">
+    <div class="case-content">
+        <div class="case-text">
+            <h3>Интерактивные инструменты поддержки</h3>
+            <p><strong>Задача:</strong> Ускорить обработку типовых запросов службы поддержки на 30%.</p>
+            <p><strong>Решение:</strong></p>
+            <ul>
+                <li>Создание интерактивных чек-листов на HTML/CSS/JS</li>
+                <li>Интеграция с REST API для валидации оборудования</li>
+                <li>Адаптивный дизайн для мобильных устройств</li>
+                <li>Система статусов и комментариев для коллег</li>
+            </ul>
+            <p><strong>Результат:</strong> Сокращение времени на рутинные операции с 30 до 10 минут.</p>
+            <div class="tech-tags">
+                <span>HTML/CSS/JS</span>
+                <span>REST API</span>
+                <span>Interactive Guides</span>
+                <span>UX/UI Design</span>
+            </div>
+            
+            <!-- Дополнительная информация о файлах -->
+            <div class="file-info">
+                <h4>Файлы примера:</h4>
+                <div class="file-badges">
+                    <span class="file-badge"><i class="fas fa-file-code"></i> check sheet.html</span>
+                    <span class="file-badge"><i class="fas fa-paint-brush"></i> check sheet стили</span>
+                </div>
+                <p><small>Инструмент используется командой поддержки из 15+ человек</small></p>
+            </div>
+        </div>
+        <div class="case-visual">
+            <!-- Контейнер для чек-листа -->
+            <div class="preview-container" id="checklistPreview">
+                <!-- Заголовок предпросмотра -->
+                <div class="preview-header">
+                    <h4><i class="fas fa-clipboard-check"></i> Электронный чек-лист оборудования TealPOS</h4>
+                    <div class="preview-actions">
+                        <a href="check sheet.html" target="_blank" class="preview-btn">
+                            <i class="fas fa-external-link-alt"></i> Открыть отдельно
+                        </a>
+                        <button class="preview-btn" id="toggleChecklist">
+                            <i class="fas fa-expand"></i> Развернуть
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Iframe с чек-листом -->
+                <iframe 
+                    src="check sheet.html" 
+                    class="preview-frame" 
+                    id="checklistFrame"
+                    title="Чек-лист оборудования TealPOS"
+                    loading="lazy"
+                ></iframe>
+                
+                <!-- Индикатор загрузки -->
+                <div class="loading-indicator" id="checklistLoading">
+                    <div class="spinner"></div>
+                    <p>Загрузка электронного чек-листа...</p>
+                </div>
+                
+                <!-- Информация о документе -->
+                <div class="preview-footer">
+                    <div class="doc-stats">
+                        <span><i class="fas fa-tasks"></i> 8 категорий проверки</span>
+                        <span><i class="fas fa-check-circle"></i> 25+ контрольных точек</span>
+                        <span><i class="fas fa-users"></i> 15+ пользователей</span>
+                    </div>
+                    <a href="check sheet.html" download class="download-btn">
+                        <i class="fas fa-download"></i> Скачать HTML
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Описание возможностей -->
+            <div class="checklist-features">
+                <h4><i class="fas fa-star"></i> Ключевые возможности:</h4>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <i class="fas fa-mobile-alt"></i>
+                        <div>
+                            <strong>Адаптивный дизайн</strong>
+                            <small>Работает на ПК, планшетах и телефонах</small>
                         </div>
                     </div>
-                    <div class="case-visual">
-                        <div class="interactive-demo">
-                            <h4>Демо: Чек-лист настройки</h4>
-                            <div class="checklist">
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Проверка подключения к БД</span>
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Валидация конфигурационных файлов</span>
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Тестовый API-запрос</span>
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Логирование успешной установки</span>
-                                </label>
-                            </div>
-                            <button class="demo-btn" id="checkAll">Отметить все</button>
+                    <div class="feature-item">
+                        <i class="fas fa-sync-alt"></i>
+                        <div>
+                            <strong>Автосохранение</strong>
+                            <small>Сохраняет прогресс в LocalStorage</small>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-download"></i>
+                        <div>
+                            <strong>Экспорт результатов</strong>
+                            <small>Сводный отчет в JSON/TXT форматах</small>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-comment-alt"></i>
+                        <div>
+                            <strong>Комментарии</strong>
+                            <small>Примечания к каждому пункту</small>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Ссылка на остальные инструменты -->
+                <div class="other-tools">
+                    <a href="./assets/tealpos-doc.html" target="_blank" class="tools-link">
+                        <i class="fas fa-book"></i> Посмотреть документацию TealPOS
+                    </a>
+                </div>
             </div>
+        </div>
+    </div>
+</div>
 
             <!-- Кейс 4: Wiki.js -->
-           <div class="tab-content" id="case3">
+           <div class="tab-content" id="case4">
     <div class="case-content">
         <div class="case-text">
             <h3>Wiki.js: Архитектура документации TealPOS</h3>
