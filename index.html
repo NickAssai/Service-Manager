@@ -1,97 +1,280 @@
-// Табы для кейсов
-document.addEventListener('DOMContentLoaded', function() {
-    // Работа табов
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-    
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Убираем активный класс у всех кнопок и контента
-            tabBtns.forEach(b => b.classList.remove('active'));
-            tabContents.forEach(c => c.classList.remove('active'));
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портфолио | Service Manager для Lesta Games</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav id="navbar">
+        <div class="container">
+            <a href="#" class="logo">Service Manager</a>
+            <div class="nav-links">
+                <a href="#approach">Подход</a>
+                <a href="#cases">Кейсы</a>
+                <a href="#skills">Соответствие</a>
+                <a href="#contact">Контакты</a>
+            </div>
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Герой-секция -->
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Системное управление знаниями и сервисами</h1>
+                <p class="subtitle">Переход от документирования процессов к управлению сервисами в игровой индустрии</p>
+                <div class="hero-tags">
+                    <span class="tag">Docs as Code</span>
+                    <span class="tag">BPMN</span>
+                    <span class="tag">Infrastructure</span>
+                    <span class="tag">Process Management</span>
+                </div>
+                <a href="#cases" class="cta-button">Смотреть кейсы <i class="fas fa-arrow-down"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Раздел "Мой подход" -->
+    <section id="approach" class="section">
+        <div class="container">
+            <h2 class="section-title">Философия работы</h2>
+            <div class="approach-grid">
+                <div class="approach-card">
+                    <div class="approach-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Docs as Code</h3>
+                    <p>Документация — это часть продукта. Использую Git, Markdown, автосборку для управления знаниями.</p>
+                </div>
+                <div class="approach-card">
+                    <div class="approach-icon">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <h3>Системность</h3>
+                    <p>Анализ → Стандартизация → Автоматизация → Контроль. Полный цикл управления процессами.</p>
+                </div>
+                <div class="approach-card">
+                    <div class="approach-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Снижение рисков</h3>
+                    <p>Формализация процессов и контроль качества для минимизации операционных сбоев.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Раздел "Кейсы" -->
+    <section id="cases" class="section dark">
+        <div class="container">
+            <h2 class="section-title">Практические кейсы</h2>
             
-            // Добавляем активный класс текущей кнопке
-            btn.classList.add('active');
-            
-            // Показываем соответствующий контент
-            const tabId = btn.getAttribute('data-tab');
-            document.getElementById(tabId).classList.add('active');
-        });
-    });
-    
-    // Интерактивный чек-лист
-    const checkAllBtn = document.getElementById('checkAll');
-    if (checkAllBtn) {
-        checkAllBtn.addEventListener('click', function() {
-            const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
-            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-            
-            checkboxes.forEach(cb => {
-                cb.checked = !allChecked;
-            });
-            
-            this.textContent = allChecked ? 'Отметить все' : 'Снять все отметки';
-        });
-    }
-    
-    // Мобильное меню
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-        });
-        
-        // Закрытие меню при клике на ссылку
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.style.display = 'none';
-            });
-        });
-    }
-    
-    // Плавная прокрутка для якорных ссылок
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                const navHeight = document.getElementById('navbar').offsetHeight;
-                const targetPosition = targetElement.offsetTop - navHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-    
-    // Анимация при прокрутке
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-    
-    // Наблюдаем за элементами для анимации
-    document.querySelectorAll('.approach-card, .case-content, .table-row').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.5s, transform 0.5s';
-        observer.observe(el);
-    });
-});
+            <div class="case-tabs">
+                <button class="tab-btn active" data-tab="case1">Docs as Code</button>
+                <button class="tab-btn" data-tab="case2">Управление инфраструктурой</button>
+                <button class="tab-btn" data-tab="case3">Интерактивные инструменты</button>
+            </div>
+
+            <div class="tab-content active" id="case1">
+                <div class="case-content">
+                    <div class="case-text">
+                        <h3>Внедрение автоматизированного документирования</h3>
+                        <p><strong>Задача:</strong> Убрать хаос в релиз-нотах, сократить время на подготовку документации.</p>
+                        <p><strong>Решение:</strong></p>
+                        <ul>
+                            <li>Миграция документации на Markdown + Git</li>
+                            <li>Интеграция публикации Release Notes в CI/CD</li>
+                            <li>Настройка шаблонов и валидаторов</li>
+                        </ul>
+                        <p><strong>Результат:</strong> Время подготовки релиз-нот сокращено с 1 дня до 1 часа.</p>
+                        <div class="tech-tags">
+                            <span>Git</span>
+                            <span>Markdown</span>
+                            <span>CI/CD</span>
+                            <span>Wiki</span>
+                        </div>
+                    </div>
+                    <div class="case-visual">
+                        <div class="code-block">
+                            <pre><code># Release Notes v2.1.4
+## Новые возможности
+- [FEATURE] Добавлен экспорт в PDF
+- [API] Новый endpoint /v2/reports
+
+## Исправления
+- [BUG] Фикс утечки памяти в модуле отчетов
+- [PERF] Оптимизация запросов к БД</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="case2">
+                <div class="case-content">
+                    <div class="case-text">
+                        <h3>Формализация процессов развертывания</h3>
+                        <p><strong>Задача:</strong> Создать четкий регламент обновления кассового ПО.</p>
+                        <p><strong>Решение:</strong></p>
+                        <ul>
+                            <li>Разработка BPMN-диаграмм процессов</li>
+                            <li>Работа с MESH Central для управления конфигурациями</li>
+                            <li>Сборка и дистрибуция билдов</li>
+                        </ul>
+                        <p><strong>Результат:</strong> Стандартизированный процесс развертывания для команды из 10+ человек.</p>
+                        <div class="tech-tags">
+                            <span>BPMN</span>
+                            <span>MESH Central</span>
+                            <span>Deployment</span>
+                            <span>Configuration</span>
+                        </div>
+                    </div>
+                    <div class="case-visual">
+                        <div class="bpmn-demo">
+                            <div class="bpmn-step">Подготовка билда</div>
+                            <div class="bpmn-arrow">→</div>
+                            <div class="bpmn-step">Тестирование</div>
+                            <div class="bpmn-arrow">→</div>
+                            <div class="bpmn-step">Развертывание</div>
+                            <div class="bpmn-arrow">→</div>
+                            <div class="bpmn-step">Валидация</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="case3">
+                <div class="case-content">
+                    <div class="case-text">
+                        <h3>Интерактивные инструменты поддержки</h3>
+                        <p><strong>Задача:</strong> Ускорить обработку типовых запросов службы поддержки.</p>
+                        <p><strong>Решение:</strong></p>
+                        <ul>
+                            <li>Создание интерактивных чек-листов на HTML/CSS/JS</li>
+                            <li>Интеграция с REST API для валидации</li>
+                            <li>Адаптивный дизайн для мобильных устройств</li>
+                        </ul>
+                        <p><strong>Результат:</strong> Сокращение времени на рутинные операции на 30%.</p>
+                        <div class="tech-tags">
+                            <span>HTML/CSS/JS</span>
+                            <span>REST API</span>
+                            <span>Interactive Guides</span>
+                        </div>
+                    </div>
+                    <div class="case-visual">
+                        <div class="interactive-demo">
+                            <h4>Демо: Чек-лист настройки</h4>
+                            <div class="checklist">
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Проверка подключения к БД</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Валидация конфигурационных файлов</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Тестовый API-запрос</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Логирование успешной установки</span>
+                                </label>
+                            </div>
+                            <button class="demo-btn" id="checkAll">Отметить все</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Раздел "Соответствие вакансии" -->
+    <section id="skills" class="section">
+        <div class="container">
+            <h2 class="section-title">Соответствие требованиям Lesta Games</h2>
+            <div class="skills-table">
+                <div class="table-row header">
+                    <div class="table-cell">Требование вакансии</div>
+                    <div class="table-cell">Мой опыт</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">Опыт технического писателя в IT-команде</div>
+                    <div class="table-cell">1 год 3 месяца в Automacon + навыки из смежных ролей</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">Docs as Code</div>
+                    <div class="table-cell">Git, Markdown, авторелизы, миграция wiki</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">BPMN/UML для процессов</div>
+                    <div class="table-cell">Draw.io, Lucidchart, Mermaid.js в реальных проектах</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">Работа с инфраструктурой</div>
+                    <div class="table-cell">MESH Central, развертывание, конфигурация, API-тестирование</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">Анализ и структурирование</div>
+                    <div class="table-cell">Опыт в безопасности, комплаенсе и следственной работе</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section id="contact" class="section dark">
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="section-title">Контакты и обратная связь</h2>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>Nick-Assai@yandex.ru</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Телефон</h4>
+                            <p>+7 989 344-23-90</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-github"></i>
+                        <div>
+                            <h4>GitHub</h4>
+                            <p>github.com/ваш-username</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="source-note">
+                    <p><i class="fas fa-code-branch"></i> Исходный код этого портфолио доступен на GitHub и служит примером подхода Docs as Code.</p>
+                    <a href="https://github.com/ваш-username/lesta-portfolio" class="source-link" target="_blank">
+                        <i class="fab fa-github"></i> Посмотреть исходный код
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Портфолио подготовлено для позиции Service Manager в Lesta Games</p>
+            <p class="footer-note">Спасибо за внимание! Буду рад обсудить, как мой опыт поможет вашей команде.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
