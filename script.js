@@ -586,3 +586,114 @@ document.addEventListener('DOMContentLoaded', function() {
         header.classList.toggle('active');
     };
 });
+// Управление предпросмотром документации
+document.addEventListener('DOMContentLoaded', function() {
+    // Элементы для предпросмотра
+    const docFrame = document.getElementById('docFrame');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const togglePreviewBtn = document.getElementById('togglePreview');
+    const previewContainer = document.querySelector('.doc-preview-container');
+    
+    if (docFrame && loadingIndicator) {
+        // Скрыть индикатор загрузки когда фрейм загрузится
+        docFrame.addEventListener('load', function() {
+            loadingIndicator.style.display = 'none';
+            docFrame.classList.add('loaded');
+            
+            // Изменить высоту фрейма под содержимое
+            try {
+                const frameDoc = docFrame.contentDocument || docFrame.contentWindow.document;
+                const height = frameDoc.documentElement.scrollHeight;
+                docFrame.style.height = Math.min(height, 600) + 'px';
+            } catch (e) {
+                // Защита от CORS
+                console.log('Не удалось получить высоту содержимого фрейма');
+            }
+        });
+        
+        // Показать индикатор при ошибке загрузки
+        docFrame.addEventListener('error', function() {
+            loadingIndicator.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Не удалось загрузить документ</p>
+                    <a href="./assets/tealpos-doc.html" target="_blank" class="preview-btn">
+                        Открыть напрямую
+                    </a>
+                </div>
+            `;
+        });
+    }
+    
+    // Кнопка развернуть/свернуть
+    if (togglePreviewBtn && previewContainer) {
+        let isExpanded = false;
+        
+        togglePreviewBtn.addEventListener('click', function() {
+            isExpanded = !isExpanded;
+            
+            if (isExpanded) {
+                // Создаем оверлей
+                const overlay = document.createElement('div');
+                overlay.className = 'preview-overlay active';
+                document.body.appendChild(overlay);
+                
+                // Разворачиваем контейнер
+                previewContainer.classList.add('expanded');
+                document.body.style.overflow = 'hidden';
+                
+                // Обновляем текст кнопки
+                togglePreviewBtn.innerHTML = '<i class="fas fa-compress"></i> Свернуть';
+                
+                // Закрытие по клику на оверлей
+                overlay.addEventListener('click', function() {
+                    previewContainer.classList.remove('expanded');
+                    overlay.remove();
+                    document.body.style.overflow = '';
+                    togglePreviewBtn.innerHTML = '<i class="fas fa-expand"></i> Развернуть';
+                    isExpanded = false;
+                });
+                
+                // Закрытие по Escape
+                document.addEventListener('keydown', function closeOnEscape(e) {
+                    if (e.key === 'Escape') {
+                        previewContainer.classList.remove('expanded');
+                        overlay.remove();
+                        document.body.style.overflow = '';
+                        togglePreviewBtn.innerHTML = '<i class="fas fa-expand"></i> Развернуть';
+                        isExpanded = false;
+                        document.removeEventListener('keydown', closeOnEscape);
+                    }
+                });
+            } else {
+                // Сворачиваем
+                const overlay = document.querySelector('.preview-overlay');
+                if (overlay) overlay.remove();
+                previewContainer.classList.remove('expanded');
+                document.body.style.overflow = '';
+                togglePreviewBtn.innerHTML = '<i class="fas fa-expand"></i> Развернуть';
+            }
+        });
+    }
+    
+    // Предзагрузка документа при наведении на таб
+    const tab3Btn = document.querySelector('[data-tab="case3"]');
+    if (tab3Btn && docFrame) {
+        let isPreloaded = false;
+        
+        tab3Btn.addEventListener('mouseenter', function() {
+            if (!isPreloaded && docFrame.src && !docFrame.loaded) {
+                // Предзагрузка
+                const tempFrame = document.createElement('iframe');
+                tempFrame.style.display = 'none';
+                tempFrame.src = docFrame.src;
+                document.body.appendChild(tempFrame);
+                
+                tempFrame.onload = function() {
+                    isPreloaded = true;
+                    document.body.removeChild(tempFrame);
+                };
+            }
+        });
+    }
+});
