@@ -1,6 +1,8 @@
-// Табы для кейсов
+// Все скрипты для портфолио
 document.addEventListener('DOMContentLoaded', function() {
-    // Работа табов
+    // ====================
+    // 1. Работа табов кейсов
+    // ====================
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     
@@ -19,63 +21,69 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Wiki.js темы
-const wikiDemo = document.querySelector('#case4 .wiki-demo .demo-card');
-if (wikiDemo) {
-    document.querySelectorAll('#case4 .theme-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('#case4 .theme-btn').forEach(b => b.classList.remove('active'));
+    // ====================
+    // 2. Wiki.js темы (переключение светлой/темной)
+    // ====================
+    const wikiDemo = document.querySelector('#case4 .wiki-demo');
+    if (wikiDemo) {
+        document.querySelectorAll('#case4 .theme-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Убираем активный класс у всех кнопок
+                document.querySelectorAll('#case4 .theme-btn').forEach(b => b.classList.remove('active'));
+                
+                // Добавляем активный класс текущей кнопке
+                this.classList.add('active');
+                
+                // Получаем тему из data-атрибута
+                const theme = this.getAttribute('data-theme');
+                
+                // Устанавливаем тему для всего демо-блока
+                wikiDemo.setAttribute('data-theme', theme);
+            });
+        });
+    }
+
+    // ====================
+    // 3. Табы для демо-кода в Wiki.js
+    // ====================
+    document.querySelectorAll('#case4 .code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-code');
+            
+            // Убираем активный класс у всех кнопок и контента
+            document.querySelectorAll('#case4 .code-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#case4 .code-content').forEach(c => c.classList.remove('active'));
+            
+            // Добавляем активный класс текущей кнопке
             this.classList.add('active');
             
-            const theme = this.getAttribute('data-theme');
-            const demoCard = document.querySelector('#case4 .demo-card');
-            
-            if (theme === 'dark') {
-                demoCard.style.background = 'rgba(40, 40, 40, 0.8)';
-                demoCard.style.color = '#ffffff';
-                demoCard.querySelectorAll('h6, li, .demo-subtitle').forEach(el => {
-                    el.style.color = 'rgba(255, 255, 255, 0.8)';
-                });
-            } else {
-                demoCard.style.background = 'rgba(255, 255, 255, 0.9)';
-                demoCard.style.color = '#334155';
-                demoCard.querySelectorAll('h6, li, .demo-subtitle').forEach(el => {
-                    el.style.color = '#555555';
-                });
-            }
+            // Показываем соответствующий контент
+            document.getElementById(tabId + 'Code').classList.add('active');
         });
     });
-}
 
-// Табы для демо-кода
-document.querySelectorAll('#case4 .code-tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-        const tabId = this.getAttribute('data-code');
-        
-        document.querySelectorAll('#case4 .code-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('#case4 .code-content').forEach(c => c.classList.remove('active'));
-        
-        this.classList.add('active');
-        document.getElementById(tabId + 'Code').classList.add('active');
-    });
-});
-
-    // Интерактивный чек-лист
+    // ====================
+    // 4. Интерактивный чек-лист (из кейса 3)
+    // ====================
     const checkAllBtn = document.getElementById('checkAll');
     if (checkAllBtn) {
         checkAllBtn.addEventListener('click', function() {
             const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
             const allChecked = Array.from(checkboxes).every(cb => cb.checked);
             
+            // Переключаем состояние всех чекбоксов
             checkboxes.forEach(cb => {
                 cb.checked = !allChecked;
             });
             
+            // Меняем текст кнопки
             this.textContent = allChecked ? 'Отметить все' : 'Снять все отметки';
         });
     }
     
-    // Мобильное меню
+    // ====================
+    // 5. Мобильное меню
+    // ====================
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
     
@@ -87,12 +95,16 @@ document.querySelectorAll('#case4 .code-tab').forEach(tab => {
         // Закрытие меню при клике на ссылку
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
-                navLinks.style.display = 'none';
+                if (window.innerWidth <= 768) {
+                    navLinks.style.display = 'none';
+                }
             });
         });
     }
     
-    // Плавная прокрутка для якорных ссылок
+    // ====================
+    // 6. Плавная прокрутка для якорных ссылок
+    // ====================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
@@ -113,7 +125,9 @@ document.querySelectorAll('#case4 .code-tab').forEach(tab => {
         });
     });
     
-    // Анимация при прокрутке
+    // ====================
+    // 7. Анимация при прокрутке
+    // ====================
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -135,4 +149,52 @@ document.querySelectorAll('#case4 .code-tab').forEach(tab => {
         el.style.transition = 'opacity 0.5s, transform 0.5s';
         observer.observe(el);
     });
+    
+    // ====================
+    // 8. Дополнительная анимация для карточек Wiki.js
+    // ====================
+    const wikiCards = document.querySelectorAll('#case4 .wiki-card');
+    if (wikiCards.length > 0) {
+        const wikiObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 100); // Задержка для каждой карточки
+                }
+            });
+        }, observerOptions);
+        
+        wikiCards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(12px)';
+            wikiObserver.observe(card);
+        });
+    }
+    
+    // ====================
+    // 9. Автоматическое закрытие мобильного меню при ресайзе
+    // ====================
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && navLinks) {
+            navLinks.style.display = 'flex';
+        } else if (window.innerWidth <= 768 && navLinks) {
+            navLinks.style.display = 'none';
+        }
+    });
+    
+    // ====================
+    // 10. Инициализация по умолчанию
+    // ====================
+    // Если есть таб Wiki.js, убедимся что он инициализирован правильно
+    if (document.querySelector('#case4')) {
+        // Инициализируем табы кода, если они есть
+        const firstCodeTab = document.querySelector('#case4 .code-tab');
+        if (firstCodeTab && !firstCodeTab.classList.contains('active')) {
+            firstCodeTab.classList.add('active');
+            const firstTabId = firstCodeTab.getAttribute('data-code');
+            document.getElementById(firstTabId + 'Code')?.classList.add('active');
+        }
+    }
 });
