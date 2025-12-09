@@ -816,3 +816,311 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+/* ==================== */
+/* Стили для электронного чек-листа */
+/* ==================== */
+
+/* Контейнер предпросмотра */
+.preview-container {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-light);
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.preview-container.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+    border-radius: 0;
+    margin: 0;
+}
+
+/* Заголовок предпросмотра */
+.preview-header {
+    background: linear-gradient(135deg, var(--dark) 0%, #334155 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.preview-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.preview-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.preview-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.preview-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Фрейм с чек-листом */
+.preview-frame {
+    width: 100%;
+    height: 500px;
+    border: none;
+    display: block;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.preview-frame.loaded {
+    opacity: 1;
+}
+
+.preview-container.expanded .preview-frame {
+    height: calc(100vh - 120px);
+}
+
+/* Индикатор загрузки */
+.loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    background: var(--light);
+    min-height: 300px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--gray-light);
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-message {
+    text-align: center;
+    color: var(--gray);
+}
+
+.error-message i {
+    font-size: 2rem;
+    color: #ef4444;
+    margin-bottom: 1rem;
+}
+
+/* Футер предпросмотра */
+.preview-footer {
+    background: var(--light);
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--gray-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.doc-stats {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--gray);
+}
+
+.doc-stats span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.download-btn {
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+}
+
+.download-btn:hover {
+    background: var(--primary-dark);
+}
+
+/* Особенности чек-листа */
+.checklist-features {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-light);
+}
+
+.checklist-features h4 {
+    color: var(--dark);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--light);
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-light);
+    transition: all 0.2s;
+}
+
+.feature-item:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+}
+
+.feature-item i {
+    color: var(--primary);
+    font-size: 1.25rem;
+    min-width: 24px;
+}
+
+.feature-item strong {
+    display: block;
+    color: var(--dark);
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.feature-item small {
+    display: block;
+    color: var(--gray);
+    font-size: 0.75rem;
+}
+
+/* Ссылка на другие инструменты */
+.other-tools {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-light);
+}
+
+.tools-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--secondary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.tools-link:hover {
+    background: #6d28d9;
+    transform: translateY(-2px);
+}
+
+/* Оверлей для развернутого режима */
+.preview-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1999;
+    display: none;
+}
+
+.preview-overlay.active {
+    display: block;
+}
+
+/* Адаптивность для чек-листа */
+@media (max-width: 768px) {
+    .preview-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .preview-actions {
+        justify-content: center;
+    }
+    
+    .preview-frame {
+        height: 400px;
+    }
+    
+    .preview-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .doc-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .feature-item {
+        padding: 1rem;
+    }
+}
+
+
+
