@@ -697,3 +697,130 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+// Управление чек-листом
+document.addEventListener('DOMContentLoaded', function() {
+    // Элементы для чек-листа
+    const checklistFrame = document.getElementById('checklistFrame');
+    const checklistLoading = document.getElementById('checklistLoading');
+    const toggleChecklistBtn = document.getElementById('toggleChecklist');
+    const checklistPreview = document.getElementById('checklistPreview');
+    
+    if (checklistFrame && checklistLoading) {
+        // Скрыть индикатор загрузки когда фрейм загрузится
+        checklistFrame.addEventListener('load', function() {
+            checklistLoading.style.display = 'none';
+            checklistFrame.classList.add('loaded');
+            
+            // Попробовать настроить высоту фрейма
+            try {
+                // Проверим, загрузился ли контент
+                const frameDoc = checklistFrame.contentDocument || checklistFrame.contentWindow.document;
+                
+                // Подождем немного для полной загрузки
+                setTimeout(() => {
+                    const height = frameDoc.documentElement.scrollHeight;
+                    // Установим высоту, но не больше 600px
+                    checklistFrame.style.height = Math.min(height, 600) + 'px';
+                }, 100);
+            } catch (e) {
+                // Защита от CORS - просто скрываем индикатор
+                console.log('Чек-лист загружен, но недоступен для настройки высоты');
+            }
+        });
+        
+        // Показать сообщение об ошибке
+        checklistFrame.addEventListener('error', function() {
+            checklistLoading.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Не удалось загрузить чек-лист</p>
+                    <p><small>Проверьте наличие файла check sheet.html в корневой папке</small></p>
+                    <a href="check sheet.html" target="_blank" class="preview-btn" style="margin-top: 1rem;">
+                        Попробовать открыть напрямую
+                    </a>
+                </div>
+            `;
+        });
+        
+        // Начать загрузку сразу
+        checklistFrame.style.display = 'block';
+    }
+    
+    // Кнопка развернуть/свернуть
+    if (toggleChecklistBtn && checklistPreview) {
+        let isExpanded = false;
+        
+        toggleChecklistBtn.addEventListener('click', function() {
+            isExpanded = !isExpanded;
+            
+            if (isExpanded) {
+                // Создаем оверлей
+                const overlay = document.createElement('div');
+                overlay.className = 'preview-overlay active';
+                document.body.appendChild(overlay);
+                
+                // Разворачиваем контейнер
+                checklistPreview.classList.add('expanded');
+                document.body.style.overflow = 'hidden';
+                
+                // Обновляем текст кнопки
+                toggleChecklistBtn.innerHTML = '<i class="fas fa-compress"></i> Свернуть';
+                
+                // Закрытие по клику на оверлей
+                overlay.addEventListener('click', function() {
+                    checklistPreview.classList.remove('expanded');
+                    overlay.remove();
+                    document.body.style.overflow = '';
+                    toggleChecklistBtn.innerHTML = '<i class="fas fa-expand"></i> Развернуть';
+                    isExpanded = false;
+                });
+                
+                // Закрытие по Escape
+                function closeOnEscape(e) {
+                    if (e.key === 'Escape') {
+                        checklistPreview.classList.remove('expanded');
+                        if (overlay && overlay.parentNode) {
+                            overlay.remove();
+                        }
+                        document.body.style.overflow = '';
+                        toggleChecklistBtn.innerHTML = '<i class="fas fa-expand"></i> Развернуть';
+                        isExpanded = false;
+                        document.removeEventListener('keydown', closeOnEscape);
+                    }
+                }
+                
+                document.addEventListener('keydown', closeOnEscape);
+            } else {
+                // Сворачиваем
+                const overlay = document.querySelector('.preview-overlay');
+                if (overlay) overlay.remove();
+                checklistPreview.classList.remove('expanded');
+                document.body.style.overflow = '';
+                toggleChecklistBtn.innerHTML = '<i class="fas fa-expand"></i> Развернуть';
+            }
+        });
+    }
+    
+    // Предзагрузка чек-листа при наведении на таб
+    const tab3Btn = document.querySelector('[data-tab="case3"]');
+    if (tab3Btn && checklistFrame) {
+        let isPreloaded = false;
+        
+        tab3Btn.addEventListener('mouseenter', function() {
+            if (!isPreloaded && checklistFrame.src) {
+                // Предзагрузка
+                const tempFrame = document.createElement('iframe');
+                tempFrame.style.display = 'none';
+                tempFrame.src = checklistFrame.src;
+                document.body.appendChild(tempFrame);
+                
+                tempFrame.onload = function() {
+                    isPreloaded = true;
+                    if (tempFrame.parentNode) {
+                        document.body.removeChild(tempFrame);
+                    }
+                };
+            }
+        });
+    }
+});
