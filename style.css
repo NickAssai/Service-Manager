@@ -236,7 +236,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
-    align-items: center;
+    align-items: start;
 }
 
 .case-text h3 {
@@ -267,6 +267,298 @@ body {
     font-size: 0.875rem;
 }
 
+/* Дополнительная информация о файлах */
+.file-info {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.file-info h4 {
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.file-badges {
+    display: flex;
+    gap: 0.75rem;
+    margin: 0.5rem 0;
+    flex-wrap: wrap;
+}
+
+.file-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Контейнер предпросмотра документации */
+.doc-preview-container {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    border: 1px solid var(--gray-light);
+    margin-bottom: 1.5rem;
+}
+
+.doc-preview-container.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+    border-radius: 0;
+    margin: 0;
+}
+
+/* Заголовок предпросмотра */
+.preview-header {
+    background: linear-gradient(135deg, var(--dark) 0%, #334155 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.preview-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.preview-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.preview-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.preview-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Фрейм с документом */
+.doc-preview-frame {
+    width: 100%;
+    height: 400px;
+    border: none;
+    display: block;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.doc-preview-frame.loaded {
+    opacity: 1;
+}
+
+.doc-preview-container.expanded .doc-preview-frame {
+    height: calc(100vh - 120px);
+}
+
+/* Индикатор загрузки */
+.loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    background: var(--light);
+    min-height: 200px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--gray-light);
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-message {
+    text-align: center;
+    color: var(--gray);
+}
+
+.error-message i {
+    font-size: 2rem;
+    color: #ef4444;
+    margin-bottom: 1rem;
+}
+
+/* Футер предпросмотра */
+.preview-footer {
+    background: var(--light);
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--gray-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.doc-stats {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--gray);
+}
+
+.doc-stats span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.download-btn {
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+}
+
+.download-btn:hover {
+    background: var(--primary-dark);
+}
+
+/* Структура документов */
+.related-documents {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-light);
+}
+
+.related-documents h4 {
+    color: var(--dark);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.doc-structure {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.structure-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--light);
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-light);
+    transition: all 0.2s;
+}
+
+.structure-item:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+}
+
+.structure-item i {
+    color: var(--primary);
+    font-size: 1.25rem;
+}
+
+.structure-item strong {
+    display: block;
+    color: var(--dark);
+    font-size: 0.875rem;
+}
+
+.structure-item small {
+    display: block;
+    color: var(--gray);
+    font-size: 0.75rem;
+}
+
+/* Ссылка на GitHub */
+.full-structure-link {
+    text-align: center;
+}
+
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #24292e;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.github-link:hover {
+    background: #2d3339;
+}
+
+/* Оверлей для развернутого режима */
+.preview-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1999;
+    display: none;
+}
+
+.preview-overlay.active {
+    display: block;
+}
+
+/* Блок кода */
 .code-block {
     background: #1e293b;
     border-radius: var(--radius);
@@ -410,6 +702,7 @@ footer {
 /* Стили для таба Wiki.js */
 /* ==================== */
 
+/* Стили для демо Wiki.js (если нужно) */
 #case4 .wiki-demo {
     --wiki-text-primary: #222222;
     --wiki-text-secondary: #555555;
@@ -431,794 +724,18 @@ footer {
     font-size: 16px;
 }
 
-#case4 .wiki-demo[data-theme="dark"] {
-    --wiki-text-primary: #ffffff;
-    --wiki-text-secondary: #cccccc;
-    --wiki-text-muted: #aaaaaa;
-    --wiki-border-light: #444444;
-    --wiki-bg-primary: #1a1a1a;
-    --wiki-bg-card: rgba(40, 40, 40, 0.8);
-    --wiki-bg-card-hover: rgba(60, 60, 60, 0.8);
-    --wiki-link-default: #ffffff;
-    --wiki-link-hover: #bbdefb;
-    background: var(--wiki-bg-primary);
-}
+/* ... остальные стили для case4 и case5 ... */
 
-#case4 .demo-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--wiki-border-light);
-}
-
-#case4 .demo-header h4 {
-    color: var(--wiki-text-primary);
-    font-size: 1.2em;
-    font-weight: 600;
-    margin: 0;
-}
-
-#case4 .theme-toggle {
-    display: flex;
-    gap: 0.5rem;
-    background: rgba(0, 0, 0, 0.05);
-    padding: 0.25rem;
-    border-radius: 20px;
-}
-
-#case4 .wiki-demo[data-theme="dark"] .theme-toggle {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-#case4 .theme-btn {
-    background: transparent;
-    border: none;
-    color: var(--wiki-text-secondary);
-    padding: 0.5rem 1rem;
-    border-radius: 16px;
-    cursor: pointer;
-    font-size: 0.875rem;
-    transition: all 0.3s;
-}
-
-#case4 .theme-btn.active {
-    background: #1565c0;
-    color: white;
-}
-
-#case4 .wiki-demo[data-theme="dark"] .theme-btn.active {
-    background: #bbdefb;
-    color: #1a1a1a;
-}
-
-/* Основной контент Wiki.js стиль */
-#case4 .wiki-main h1 {
-    font-size: 2.2em;
-    color: var(--wiki-text-primary);
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 8px;
-}
-
-#case4 .wiki-subtitle {
-    text-align: center;
-    color: var(--wiki-text-muted);
-    max-width: 800px;
-    margin: 0 auto 32px;
-    line-height: 1.5;
-}
-
-#case4 .wiki-main h2 {
-    font-size: 1.45em;
-    color: var(--wiki-text-primary);
-    margin-top: 40px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--wiki-border-light);
-    text-align: left;
-}
-
-#case4 .wiki-main h2:first-of-type {
-    text-align: center;
-}
-
-#case4 .wiki-main p {
-    margin-bottom: 24px;
-}
-
-/* Сетка карточек */
-#case4 .landing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-    margin: 28px 0 40px;
-}
-
-#case4 .wiki-card {
-    background: var(--wiki-bg-card);
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    border: 1px solid rgba(0, 0, 0, 0.03);
-    opacity: 0;
-    transform: translateY(12px);
-}
-
-#case4 .wiki-demo[data-theme="dark"] .wiki-card {
-    border-color: rgba(255, 255, 255, 0.05);
-}
-
-#case4 .wiki-card:hover {
-    background: var(--wiki-bg-card-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-}
-
-#case4 .wiki-card h3 {
-    margin-top: 0;
-    color: var(--wiki-text-primary);
-    font-size: 1.2em;
-    font-weight: 600;
-    margin-bottom: 16px;
-}
-
-#case4 .wiki-card ul {
-    padding-left: 24px;
-    margin: 12px 0;
-}
-
-#case4 .wiki-card li {
-    margin-bottom: 8px;
-    color: var(--wiki-text-secondary);
-}
-
-#case4 .wiki-card a {
-    color: var(--wiki-link-default);
-    text-decoration: none;
-    transition: color 0.2s ease;
-    border-bottom: 1px dashed transparent;
-}
-
-#case4 .wiki-card a:hover {
-    color: var(--wiki-link-hover);
-    border-bottom-color: var(--wiki-link-hover);
-}
-
-#case4 .wiki-card a::after {
-    content: "↗";
-    display: inline-block;
-    margin-left: 4px;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-#case4 .wiki-card a:hover::after {
-    opacity: 1;
-}
-
-/* Анимации */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#case4 .wiki-card:nth-child(1) {
-    animation: fadeInUp 0.6s ease 0.1s forwards;
-}
-
-#case4 .wiki-card:nth-child(2) {
-    animation: fadeInUp 0.6s ease 0.2s forwards;
-}
-
-#case4 .wiki-card:nth-child(3) {
-    animation: fadeInUp 0.6s ease 0.3s forwards;
-}
-
-#case4 .wiki-card:nth-child(4) {
-    animation: fadeInUp 0.6s ease 0.4s forwards;
-}
-
-/* Табы для кода */
-#case4 .code-tabs {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-}
-
-#case4 .code-tab {
-    background: rgba(0, 0, 0, 0.05);
-    border: none;
-    color: var(--wiki-text-secondary);
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.875rem;
-    transition: all 0.3s;
-}
-
-#case4 .wiki-demo[data-theme="dark"] .code-tab {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--wiki-text-secondary);
-}
-
-#case4 .code-tab.active {
-    background: #1565c0;
-    color: white;
-}
-
-#case4 .wiki-demo[data-theme="dark"] .code-tab.active {
-    background: #bbdefb;
-    color: #1a1a1a;
-}
-
-#case4 .code-content {
-    display: none;
-    background: rgba(0, 0, 0, 0.02);
-    border-radius: 8px;
-    padding: 1.5rem;
-    overflow-x: auto;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    margin-bottom: 1rem;
-}
-
-#case4 .wiki-demo[data-theme="dark"] .code-content {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-#case4 .code-content.active {
-    display: block;
-    animation: fadeIn 0.3s;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-#case4 .code-content pre {
-    margin: 0;
-    color: var(--wiki-text-primary);
-    font-family: 'SF Mono', Consolas, 'Courier New', monospace;
-    font-size: 0.875rem;
-    line-height: 1.4;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-}
-
-#case4 .code-content code {
-    background: transparent;
-    color: var(--wiki-text-primary);
-}
-
-/* Адаптивность для Wiki.js демо */
-@media (max-width: 768px) {
-    #case4 .wiki-demo {
-        padding: 20px;
-    }
-    
-    #case4 .landing-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    
-    #case4 .demo-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
-    
-    #case4 .theme-toggle {
-        align-self: flex-start;
-    }
-}
-
-/* ... все предыдущие стили остаются без изменений ... */
-
-/* ==================== */
-/* Стили для таба чек-листов TealPOS */
-/* ==================== */
-
-#case5 .checklist-demo {
-    --cl-primary: #3b82f6;
-    --cl-primary-dark: #2563eb;
-    --cl-success: #10b981;
-    --cl-danger: #ef4444;
-    --cl-warning: #f59e0b;
-    --cl-dark-1: #1e293b;
-    --cl-dark-2: #0f172a;
-    --cl-light-1: #f8fafc;
-    --cl-light-2: #e2e8f0;
-    --cl-light-3: #94a3b8;
-    
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-    color: var(--cl-light-1);
-    background: linear-gradient(135deg, var(--cl-dark-1) 0%, var(--cl-dark-2) 100%);
-    padding: 24px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-}
-
-#case5 .checklist-demo[data-theme="light"] {
-    --cl-dark-1: #f8fafc;
-    --cl-dark-2: #e2e8f0;
-    --cl-light-1: #1e293b;
-    --cl-light-2: #334155;
-    --cl-light-3: #64748b;
-    background: linear-gradient(135deg, var(--cl-dark-1) 0%, var(--cl-dark-2) 100%);
-}
-
-#case5 .checklist-demo .demo-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-#case5 .checklist-demo[data-theme="light"] .demo-header {
-    border-bottom-color: rgba(0, 0, 0, 0.1);
-}
-
-#case5 .checklist-demo .demo-header h4 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--cl-light-1);
-    margin: 0;
-}
-
-#case5 .theme-toggle {
-    display: flex;
-    gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.25rem;
-    border-radius: 20px;
-}
-
-#case5 .checklist-demo[data-theme="light"] .theme-toggle {
-    background: rgba(0, 0, 0, 0.1);
-}
-
-#case5 .theme-btn {
-    background: transparent;
-    border: none;
-    color: var(--cl-light-3);
-    padding: 0.5rem 1rem;
-    border-radius: 16px;
-    cursor: pointer;
-    font-size: 0.875rem;
-    transition: all 0.3s;
-}
-
-#case5 .theme-btn.active {
-    background: var(--cl-primary);
-    color: white;
-}
-
-#case5 .checklist-demo[data-theme="light"] .theme-btn.active {
-    background: var(--cl-primary-dark);
-}
-
-/* Статистика */
-#case5 .checklist-stats {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 24px;
-    padding: 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-#case5 .checklist-demo[data-theme="light"] .checklist-stats {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.1);
-}
-
-#case5 .stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#case5 .stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--cl-primary);
-}
-
-#case5 .stat-label {
-    font-size: 0.875rem;
-    color: var(--cl-light-3);
-    margin-top: 4px;
-}
-
-/* Устройства */
-#case5 .devices-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
-    margin-bottom: 24px;
-}
-
-#case5 .device-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 16px;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-align: center;
-}
-
-#case5 .checklist-demo[data-theme="light"] .device-card {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.1);
-}
-
-#case5 .device-card:hover {
-    background: rgba(59, 130, 246, 0.1);
-    border-color: var(--cl-primary);
-    transform: translateY(-2px);
-}
-
-#case5 .device-card h5 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--cl-light-1);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-#case5 .progress-bar {
-    height: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 8px;
-}
-
-#case5 .checklist-demo[data-theme="light"] .progress-bar {
-    background: rgba(0, 0, 0, 0.1);
-}
-
-#case5 .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--cl-primary), var(--cl-success));
-    border-radius: 3px;
-    transition: width 0.5s ease;
-}
-
-#case5 .progress-text {
-    font-size: 0.875rem;
-    color: var(--cl-light-3);
-    font-weight: 600;
-}
-
-/* Секции чек-листа */
-#case5 .checklist-section {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    margin-bottom: 16px;
-    overflow: hidden;
-}
-
-#case5 .checklist-demo[data-theme="light"] .checklist-section {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.1);
-}
-
-#case5 .section-header {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    background: rgba(59, 130, 246, 0.1);
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 1.1rem;
-    transition: background-color 0.3s;
-    user-select: none;
-    color: var(--cl-light-1);
-}
-
-#case5 .checklist-demo[data-theme="light"] .section-header {
-    background: rgba(59, 130, 246, 0.15);
-}
-
-#case5 .section-header:hover {
-    background: rgba(59, 130, 246, 0.2);
-}
-
-#case5 .section-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid white;
-    border-radius: 50%;
-    color: white;
-    margin-right: 12px;
-    font-weight: 700;
-    font-size: 0.875rem;
-}
-
-#case5 .checklist-demo[data-theme="light"] .section-number {
-    background: rgba(0, 0, 0, 0.1);
-    border-color: var(--cl-light-1);
-    color: var(--cl-light-1);
-}
-
-#case5 .section-toggle {
-    margin-left: auto;
-    font-size: 0.875rem;
-    color: var(--cl-light-3);
-    transition: transform 0.3s;
-}
-
-#case5 .section-header.active .section-toggle {
-    transform: rotate(180deg);
-}
-
-#case5 .section-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease;
-}
-
-#case5 .section-header.active + .section-content {
-    max-height: 1000px;
-}
-
-/* Пункты чек-листа */
-#case5 .checklist-item {
-    display: flex;
-    gap: 16px;
-    padding: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-#case5 .checklist-demo[data-theme="light"] .checklist-item {
-    border-bottom-color: rgba(0, 0, 0, 0.1);
-}
-
-#case5 .checklist-item:last-child {
-    border-bottom: none;
-}
-
-#case5 .item-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex-shrink: 0;
-}
-
-#case5 .item-controls button {
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 700;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#case5 .item-controls .yes {
-    background: rgba(16, 185, 129, 0.2);
-    color: var(--cl-success);
-}
-
-#case5 .item-controls .yes.active {
-    background: var(--cl-success);
-    color: white;
-    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
-}
-
-#case5 .item-controls .no {
-    background: rgba(239, 68, 68, 0.2);
-    color: var(--cl-danger);
-}
-
-#case5 .item-controls .no.active {
-    background: var(--cl-danger);
-    color: white;
-    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
-}
-
-#case5 .item-content {
-    flex: 1;
-}
-
-#case5 .item-text {
-    color: var(--cl-light-1);
-    font-weight: 500;
-    margin-bottom: 8px;
-    line-height: 1.5;
-}
-
-#case5 .expected-result {
-    background: rgba(139, 92, 246, 0.1);
-    color: white;
-    padding: 10px 12px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    font-size: 0.875rem;
-    border-left: 3px solid #8b5cf6;
-}
-
-#case5 .checklist-demo[data-theme="light"] .expected-result {
-    background: rgba(139, 92, 246, 0.1);
-    color: var(--cl-light-1);
-}
-
-#case5 .item-actions {
-    margin-bottom: 12px;
-}
-
-#case5 .action-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 12px;
-    background: rgba(59, 130, 246, 0.2);
-    color: var(--cl-primary);
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.3s;
-}
-
-#case5 .action-link:hover {
-    background: rgba(59, 130, 246, 0.3);
-}
-
-#case5 .comment-section textarea {
-    width: 100%;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    color: var(--cl-light-1);
-    font-size: 0.875rem;
-    resize: vertical;
-    min-height: 60px;
-    transition: border-color 0.3s;
-}
-
-#case5 .checklist-demo[data-theme="light"] .comment-section textarea {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.1);
-    color: var(--cl-light-1);
-}
-
-#case5 .comment-section textarea:focus {
-    outline: none;
-    border-color: var(--cl-primary);
-}
-
-/* Кнопки действий */
-#case5 .checklist-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 24px;
-    justify-content: center;
-}
-
-#case5 .action-btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-#case5 .action-btn.primary {
-    background: linear-gradient(135deg, var(--cl-primary), var(--cl-primary-dark));
-    color: white;
-}
-
-#case5 .action-btn.primary:hover {
-    background: linear-gradient(135deg, var(--cl-primary-dark), #1d4ed8);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-}
-
-#case5 .action-btn.secondary {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--cl-light-1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-#case5 .checklist-demo[data-theme="light"] .action-btn.secondary {
-    background: rgba(0, 0, 0, 0.1);
-    border-color: rgba(0, 0, 0, 0.2);
-    color: var(--cl-light-1);
-}
-
-#case5 .action-btn.secondary:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
-
-/* Анимации */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#case5 .checklist-demo {
-    animation: fadeInUp 0.6s ease;
-}
-
-/* Адаптивность для чек-листа */
-@media (max-width: 768px) {
-    #case5 .devices-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    #case5 .checklist-item {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    #case5 .item-controls {
-        flex-direction: row;
-        justify-content: center;
-    }
-    
-    #case5 .checklist-actions {
-        flex-direction: column;
-    }
-    
-    #case5 .action-btn {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-/* Общая адаптивность */
+/* Адаптивность */
 @media (max-width: 768px) {
     .nav-links {
         display: none;
+        flex-direction: column;
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
         background: white;
-        flex-direction: column;
         padding: 1rem;
         box-shadow: var(--shadow);
     }
@@ -1237,6 +754,7 @@ footer {
     
     .case-content {
         grid-template-columns: 1fr;
+        gap: 2rem;
     }
     
     .table-row {
@@ -1258,5 +776,43 @@ footer {
     
     .section-title {
         font-size: 2rem;
+    }
+    
+    /* Адаптивность для предпросмотра документации */
+    .preview-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .preview-actions {
+        justify-content: center;
+    }
+    
+    .doc-preview-frame {
+        height: 300px;
+    }
+    
+    .preview-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .doc-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .doc-structure {
+        grid-template-columns: 1fr;
+    }
+    
+    .approach-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-info {
+        grid-template-columns: 1fr;
     }
 }
