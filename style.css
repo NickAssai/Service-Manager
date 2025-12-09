@@ -722,6 +722,493 @@ footer {
     }
 }
 
+/* ... все предыдущие стили остаются без изменений ... */
+
+/* ==================== */
+/* Стили для таба чек-листов TealPOS */
+/* ==================== */
+
+#case5 .checklist-demo {
+    --cl-primary: #3b82f6;
+    --cl-primary-dark: #2563eb;
+    --cl-success: #10b981;
+    --cl-danger: #ef4444;
+    --cl-warning: #f59e0b;
+    --cl-dark-1: #1e293b;
+    --cl-dark-2: #0f172a;
+    --cl-light-1: #f8fafc;
+    --cl-light-2: #e2e8f0;
+    --cl-light-3: #94a3b8;
+    
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    color: var(--cl-light-1);
+    background: linear-gradient(135deg, var(--cl-dark-1) 0%, var(--cl-dark-2) 100%);
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+#case5 .checklist-demo[data-theme="light"] {
+    --cl-dark-1: #f8fafc;
+    --cl-dark-2: #e2e8f0;
+    --cl-light-1: #1e293b;
+    --cl-light-2: #334155;
+    --cl-light-3: #64748b;
+    background: linear-gradient(135deg, var(--cl-dark-1) 0%, var(--cl-dark-2) 100%);
+}
+
+#case5 .checklist-demo .demo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#case5 .checklist-demo[data-theme="light"] .demo-header {
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+#case5 .checklist-demo .demo-header h4 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--cl-light-1);
+    margin: 0;
+}
+
+#case5 .theme-toggle {
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.25rem;
+    border-radius: 20px;
+}
+
+#case5 .checklist-demo[data-theme="light"] .theme-toggle {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+#case5 .theme-btn {
+    background: transparent;
+    border: none;
+    color: var(--cl-light-3);
+    padding: 0.5rem 1rem;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.3s;
+}
+
+#case5 .theme-btn.active {
+    background: var(--cl-primary);
+    color: white;
+}
+
+#case5 .checklist-demo[data-theme="light"] .theme-btn.active {
+    background: var(--cl-primary-dark);
+}
+
+/* Статистика */
+#case5 .checklist-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#case5 .checklist-demo[data-theme="light"] .checklist-stats {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+#case5 .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#case5 .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cl-primary);
+}
+
+#case5 .stat-label {
+    font-size: 0.875rem;
+    color: var(--cl-light-3);
+    margin-top: 4px;
+}
+
+/* Устройства */
+#case5 .devices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+#case5 .device-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+#case5 .checklist-demo[data-theme="light"] .device-card {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+#case5 .device-card:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--cl-primary);
+    transform: translateY(-2px);
+}
+
+#case5 .device-card h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cl-light-1);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+#case5 .progress-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+#case5 .checklist-demo[data-theme="light"] .progress-bar {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+#case5 .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cl-primary), var(--cl-success));
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+#case5 .progress-text {
+    font-size: 0.875rem;
+    color: var(--cl-light-3);
+    font-weight: 600;
+}
+
+/* Секции чек-листа */
+#case5 .checklist-section {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+#case5 .checklist-demo[data-theme="light"] .checklist-section {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+#case5 .section-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background: rgba(59, 130, 246, 0.1);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: background-color 0.3s;
+    user-select: none;
+    color: var(--cl-light-1);
+}
+
+#case5 .checklist-demo[data-theme="light"] .section-header {
+    background: rgba(59, 130, 246, 0.15);
+}
+
+#case5 .section-header:hover {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+#case5 .section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid white;
+    border-radius: 50%;
+    color: white;
+    margin-right: 12px;
+    font-weight: 700;
+    font-size: 0.875rem;
+}
+
+#case5 .checklist-demo[data-theme="light"] .section-number {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: var(--cl-light-1);
+    color: var(--cl-light-1);
+}
+
+#case5 .section-toggle {
+    margin-left: auto;
+    font-size: 0.875rem;
+    color: var(--cl-light-3);
+    transition: transform 0.3s;
+}
+
+#case5 .section-header.active .section-toggle {
+    transform: rotate(180deg);
+}
+
+#case5 .section-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+}
+
+#case5 .section-header.active + .section-content {
+    max-height: 1000px;
+}
+
+/* Пункты чек-листа */
+#case5 .checklist-item {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#case5 .checklist-demo[data-theme="light"] .checklist-item {
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+#case5 .checklist-item:last-child {
+    border-bottom: none;
+}
+
+#case5 .item-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+#case5 .item-controls button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#case5 .item-controls .yes {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--cl-success);
+}
+
+#case5 .item-controls .yes.active {
+    background: var(--cl-success);
+    color: white;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+}
+
+#case5 .item-controls .no {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--cl-danger);
+}
+
+#case5 .item-controls .no.active {
+    background: var(--cl-danger);
+    color: white;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
+}
+
+#case5 .item-content {
+    flex: 1;
+}
+
+#case5 .item-text {
+    color: var(--cl-light-1);
+    font-weight: 500;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+#case5 .expected-result {
+    background: rgba(139, 92, 246, 0.1);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 0.875rem;
+    border-left: 3px solid #8b5cf6;
+}
+
+#case5 .checklist-demo[data-theme="light"] .expected-result {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--cl-light-1);
+}
+
+#case5 .item-actions {
+    margin-bottom: 12px;
+}
+
+#case5 .action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--cl-primary);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+#case5 .action-link:hover {
+    background: rgba(59, 130, 246, 0.3);
+}
+
+#case5 .comment-section textarea {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--cl-light-1);
+    font-size: 0.875rem;
+    resize: vertical;
+    min-height: 60px;
+    transition: border-color 0.3s;
+}
+
+#case5 .checklist-demo[data-theme="light"] .comment-section textarea {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--cl-light-1);
+}
+
+#case5 .comment-section textarea:focus {
+    outline: none;
+    border-color: var(--cl-primary);
+}
+
+/* Кнопки действий */
+#case5 .checklist-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    justify-content: center;
+}
+
+#case5 .action-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#case5 .action-btn.primary {
+    background: linear-gradient(135deg, var(--cl-primary), var(--cl-primary-dark));
+    color: white;
+}
+
+#case5 .action-btn.primary:hover {
+    background: linear-gradient(135deg, var(--cl-primary-dark), #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+#case5 .action-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--cl-light-1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#case5 .checklist-demo[data-theme="light"] .action-btn.secondary {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.2);
+    color: var(--cl-light-1);
+}
+
+#case5 .action-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#case5 .checklist-demo {
+    animation: fadeInUp 0.6s ease;
+}
+
+/* Адаптивность для чек-листа */
+@media (max-width: 768px) {
+    #case5 .devices-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    #case5 .checklist-item {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    #case5 .item-controls {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    #case5 .checklist-actions {
+        flex-direction: column;
+    }
+    
+    #case5 .action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 /* Общая адаптивность */
 @media (max-width: 768px) {
     .nav-links {
