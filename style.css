@@ -406,6 +406,148 @@ footer {
     opacity: 0.8;
 }
 
+/* ==================== */
+/* Стили для таба Wiki.js */
+/* ==================== */
+
+#case4 .wiki-demo {
+    background: #1e293b;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#case4 .demo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+#case4 .theme-toggle {
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.25rem;
+    border-radius: 20px;
+}
+
+#case4 .theme-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0.5rem 1rem;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.3s;
+}
+
+#case4 .theme-btn.active {
+    background: var(--primary);
+    color: white;
+}
+
+#case4 .demo-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+#case4 .demo-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+#case4 .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+#case4 .demo-grid-item {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#case4 .demo-grid-item h6 {
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+#case4 .demo-grid-item ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: 0.875rem;
+}
+
+#case4 .demo-grid-item li {
+    margin-bottom: 0.25rem;
+    color: rgba(255, 255, 255, 0.8);
+    list-style-type: disc;
+}
+
+/* Табы для кода */
+#case4 .code-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#case4 .code-tab {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.3s;
+}
+
+#case4 .code-tab.active {
+    background: var(--primary);
+    color: white;
+}
+
+#case4 .code-content {
+    display: none;
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#case4 .code-content.active {
+    display: block;
+    animation: fadeIn 0.3s;
+}
+
+#case4 .code-content pre {
+    margin: 0;
+    color: #e2e8f0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+#case4 .code-content code {
+    background: transparent;
+    color: #e2e8f0;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .nav-links {
@@ -436,134 +578,4 @@ footer {
         font-size: 0.875rem;
         padding: 0.25rem 0.75rem;
     }
-}
-
-/* Wiki.js демо */
-.wiki-demo {
-    background: #1e293b;
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    color: white;
-}
-
-.demo-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-}
-
-.theme-toggle {
-    display: flex;
-    gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.25rem;
-    border-radius: 20px;
-}
-
-.theme-btn {
-    background: transparent;
-    border: none;
-    color: rgba(255, 255, 255, 0.7);
-    padding: 0.5rem 1rem;
-    border-radius: 16px;
-    cursor: pointer;
-    font-size: 0.875rem;
-    transition: all 0.3s;
-}
-
-.theme-btn.active {
-    background: var(--primary);
-    color: white;
-}
-
-.demo-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.demo-subtitle {
-    color: rgba(255, 255, 255, 0.7);
-    text-align: center;
-    margin-bottom: 1.5rem;
-}
-
-.demo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-}
-
-.demo-grid-item {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.demo-grid-item h6 {
-    margin-bottom: 0.5rem;
-    color: var(--primary);
-}
-
-.demo-grid-item ul {
-    margin: 0;
-    padding-left: 1.2rem;
-    font-size: 0.875rem;
-}
-
-.demo-grid-item li {
-    margin-bottom: 0.25rem;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-/* Табы для кода */
-.code-tabs {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.code-tab {
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: rgba(255, 255, 255, 0.7);
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.875rem;
-    transition: all 0.3s;
-}
-
-.code-tab.active {
-    background: var(--primary);
-    color: white;
-}
-
-.code-content {
-    display: none;
-    background: #0f172a;
-    border-radius: 8px;
-    padding: 1rem;
-    overflow-x: auto;
-}
-
-.code-content.active {
-    display: block;
-    animation: fadeIn 0.3s;
-}
-
-.code-content pre {
-    margin: 0;
-    color: #e2e8f0;
-    font-family: 'Courier New', monospace;
-    font-size: 0.875rem;
-    line-height: 1.4;
-}
-
-.code-content code {
-    background: transparent;
 }
