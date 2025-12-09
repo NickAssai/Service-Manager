@@ -200,132 +200,124 @@
             </div>
 
             <!-- Кейс 4: Wiki.js -->
-            <div class="tab-content" id="case4">
-                <div class="case-content">
-                    <div class="case-text">
-                        <h3>Миграция документации на Wiki.js и создание единой базы знаний</h3>
-                        <p><strong>Задача:</strong> Перевести разрозненную документацию кассового ПО на современную wiki-систему с удобной навигацией.</p>
-                        <p><strong>Решение:</strong></p>
-                        <ul>
-                            <li>Развернул и настроил Wiki.js как централизованную систему документации</li>
-                            <li>Спроектировал иерархическую структуру разделов (оборудование → архитектура → интерфейсы → поддержка)</li>
-                            <li>Создал интерактивную главную страницу-хаб с карточками навигации</li>
-                            <li>Реализовал поддержку темной/светлой темы через CSS-переменные</li>
-                            <li>Настроил адаптивный дизайн для мобильных устройств</li>
-                        </ul>
-                        <p><strong>Результат:</strong></p>
-                        <ul>
-                            <li>Единый источник документации для 50+ касс и оборудования</li>
-                            <li>Время поиска информации сократилось <strong>в 3 раза</strong></li>
-                            <li>Упростился процесс обновления документации для всех команд</li>
-                            <li>Интуитивная навигация снизила нагрузку на техническую поддержку</li>
-                        </ul>
-                        <div class="tech-tags">
-                            <span>Wiki.js</span>
-                            <span>Markdown</span>
-                            <span>CSS/HTML</span>
-                            <span>Информационная архитектура</span>
-                            <span>UX/UI</span>
+           <div class="tab-content" id="case3">
+    <div class="case-content">
+        <div class="case-text">
+            <h3>Wiki.js: Архитектура документации TealPOS</h3>
+            <p><strong>Задача:</strong> Создать единую точку входа для технической документации POS-системы с 80+ страницами.</p>
+            <p><strong>Решение:</strong></p>
+            <ul>
+                <li>Развертывание Wiki.js как централизованной платформы знаний</li>
+                <li>Структурирование по разделам: архитектура, оборудование, интерфейсы, поддержка</li>
+                <li>Внедрение навигации и перекрестных ссылок между 150+ документами</li>
+                <li>Миграция существующей документации в единый согласованный формат</li>
+            </ul>
+            <p><strong>Результат:</strong> Сокращение времени поиска информации с 15 до 2 минут для 50+ пользователей.</p>
+            <div class="tech-tags">
+                <span>Wiki.js</span>
+                <span>Markdown</span>
+                <span>Структурирование</span>
+                <span>Техническая документация</span>
+            </div>
+            
+            <!-- Дополнительная информация о файлах -->
+            <div class="file-info">
+                <h4>Файлы примера:</h4>
+                <div class="file-badges">
+                    <span class="file-badge"><i class="fas fa-file-code"></i> tealpos-doc.html</span>
+                    <span class="file-badge"><i class="fas fa-paint-brush"></i> tealpos-style.css</span>
+                </div>
+                <p><small>Документы доступны в папке <code>/assets/</code> репозитория</small></p>
+            </div>
+        </div>
+        <div class="case-visual">
+            <!-- Контейнер для предпросмотра документации -->
+            <div class="doc-preview-container">
+                <!-- Заголовок предпросмотра -->
+                <div class="preview-header">
+                    <h4><i class="fas fa-eye"></i> Предпросмотр главного экрана документации</h4>
+                    <div class="preview-actions">
+                        <a href="./assets/tealpos-doc.html" target="_blank" class="preview-btn">
+                            <i class="fas fa-external-link-alt"></i> Открыть отдельно
+                        </a>
+                        <button class="preview-btn" id="togglePreview">
+                            <i class="fas fa-expand"></i> Развернуть
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Iframe с вашим документом -->
+                <iframe 
+                    src="./assets/tealpos-doc.html" 
+                    class="doc-preview-frame" 
+                    id="docFrame"
+                    title="Документация TealPOS"
+                    loading="lazy"
+                ></iframe>
+                
+                <!-- Индикатор загрузки -->
+                <div class="loading-indicator" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Загрузка документации TealPOS...</p>
+                </div>
+                
+                <!-- Информация о документе -->
+                <div class="preview-footer">
+                    <div class="doc-stats">
+                        <span><i class="fas fa-file-alt"></i> 1 HTML документ</span>
+                        <span><i class="fas fa-code"></i> 1 CSS файл</span>
+                        <span><i class="fas fa-link"></i> 150+ внутренних ссылок</span>
+                    </div>
+                    <a href="./assets/tealpos-doc.html" download class="download-btn">
+                        <i class="fas fa-download"></i> Скачать HTML
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Список связанных документов -->
+            <div class="related-documents">
+                <h4><i class="fas fa-folder"></i> Полная структура документации</h4>
+                <div class="doc-structure">
+                    <div class="structure-item">
+                        <i class="fas fa-folder-open"></i>
+                        <div>
+                            <strong>Архитектура</strong>
+                            <small>Диаграммы, сервисы, API</small>
                         </div>
                     </div>
-                    <div class="case-visual">
-                        <!-- Демо Wiki.js -->
-                        <div class="wiki-demo" data-theme="light">
-                            <div class="demo-header">
-                                <h4>Демо: Главная страница TealPOS Wiki</h4>
-                                <div class="theme-toggle">
-                                    <button class="theme-btn active" data-theme="light">Светлая</button>
-                                    <button class="theme-btn" data-theme="dark">Темная</button>
-                                </div>
-                            </div>
-                            
-                            <div class="wiki-main">
-                                <h1>TealPOS: Руководство пользователя</h1>
-                                <p class="wiki-subtitle">
-                                    Универсальное решение для автоматизации розничной торговли от компании «Автомакон».
-                                </p>
-                                
-                                <div class="landing-grid">
-                                    <div class="wiki-card">
-                                        <h3>TealPOS: коробочное решение</h3>
-                                        <ul>
-                                            <li>Кассы самообслуживания</li>
-                                            <li>Классические кассы</li>
-                                            <li>Весы самообслуживания</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="wiki-card">
-                                        <h3>Поддерживаемое оборудование</h3>
-                                        <ul>
-                                            <li>Денежный ящик</li>
-                                            <li>Сканер штрих-кода</li>
-                                            <li>Дисплей покупателя</li>
-                                            <li>Фискальный регистратор</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="wiki-card">
-                                        <h3>Базовый функционал</h3>
-                                        <ul>
-                                            <li>Учет скидок</li>
-                                            <li>Поиск товаров</li>
-                                            <li>Формирование отчетов</li>
-                                            <li>Соответствие 54-ФЗ</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="wiki-card">
-                                        <h3>Дополнительный функционал</h3>
-                                        <ul>
-                                            <li>Интеграция систем лояльности</li>
-                                            <li>Удаленная поддержка</li>
-                                            <li>Мультимедийные средства</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="code-tabs">
-                                <button class="code-tab active" data-code="css">CSS Переменные</button>
-                                <button class="code-tab" data-code="html">HTML Структура</button>
-                            </div>
-                            
-                            <div class="code-content active" id="cssCode">
-                                <pre><code>:root {
-    --text-primary: #222222;
-    --text-secondary: #555555;
-    --bg-card: rgba(255, 255, 255, 0.6);
-    --border-light: #e0e0e0;
-}
-
-[data-theme="dark"] {
-    --text-primary: #ffffff;
-    --text-secondary: #cccccc;
-    --bg-card: rgba(40, 40, 40, 0.8);
-    --border-light: #444444;
-}</code></pre>
-                            </div>
-                            
-                            <div class="code-content" id="htmlCode">
-                                <pre><code>&lt;div class="wiki-demo" data-theme="light"&gt;
-    &lt;div class="landing-grid"&gt;
-        &lt;div class="wiki-card"&gt;
-            &lt;h3&gt;Заголовок раздела&lt;/h3&gt;
-            &lt;ul&gt;
-                &lt;li&gt;&lt;a href="#"&gt;Ссылка на документацию&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;Пункт списка&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-                            </div>
+                    <div class="structure-item">
+                        <i class="fas fa-folder-open"></i>
+                        <div>
+                            <strong>Оборудование</strong>
+                            <small>Настройка и подключение</small>
+                        </div>
+                    </div>
+                    <div class="structure-item">
+                        <i class="fas fa-folder-open"></i>
+                        <div>
+                            <strong>Интерфейсы</strong>
+                            <small>UI спецификации</small>
+                        </div>
+                    </div>
+                    <div class="structure-item">
+                        <i class="fas fa-folder-open"></i>
+                        <div>
+                            <strong>Поддержка</strong>
+                            <small>Чек-листы и руководства</small>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Ссылка на полную структуру -->
+                <div class="full-structure-link">
+                    <a href="https://github.com/ваш-username/Service-Manager/tree/main/assets" target="_blank" class="github-link">
+                        <i class="fab fa-github"></i> Посмотреть все файлы в репозитории
+                    </a>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</div>
 
     <!-- Раздел "Соответствие вакансии" -->
     <section id="skills" class="section">
