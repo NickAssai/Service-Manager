@@ -1121,6 +1121,329 @@ footer {
         padding: 1rem;
     }
 }
+/* Wiki.js preview стили */
+.wiki-preview {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.wiki-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+}
+
+.wiki-header h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+}
+
+.wiki-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+.wiki-content-preview {
+    padding: 2rem;
+}
+
+.wiki-subtitle {
+    color: #666;
+    text-align: center;
+    margin: 0.5rem 0 2rem 0;
+}
+
+.wiki-grid-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.wiki-card {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s;
+}
+
+.wiki-card:hover {
+    transform: translateY(-2px);
+    border-color: #cbd5e1;
+}
+
+.wiki-card h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+}
+
+.wiki-card h3 a {
+    color: #334155;
+    text-decoration: none;
+}
+
+.wiki-card ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.875rem;
+}
+
+.wiki-card li {
+    margin-bottom: 0.25rem;
+    color: #64748b;
+}
+
+.wiki-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.wiki-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.wiki-btn.primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.wiki-btn.secondary {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+/* Related docs */
+.related-docs {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.doc-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.doc-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+}
+
+.doc-link:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateX(4px);
+}
+
+.doc-link i {
+    color: #3b82f6;
+}
+
+/* Iframe стили */
+.iframe-container {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.iframe-header {
+    background: #1e293b;
+    color: white;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Courier New', monospace;
+}
+
+.iframe-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.iframe-actions button,
+.iframe-actions a {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.doc-iframe {
+    width: 100%;
+    height: 500px;
+    border: none;
+}
+
+.iframe-footer {
+    background: #f8fafc;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #64748b;
+    border-top: 1px solid #e2e8f0;
+}
+
+.download-btn {
+    background: #3b82f6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+/* File list */
+.file-list {
+    margin-top: 2rem;
+}
+
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.file-item i {
+    font-size: 1.5rem;
+    color: #3b82f6;
+}
+
+.file-item small {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+/* Source tree */
+.source-tree {
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+}
+
+.source-tree pre {
+    margin: 0;
+    color: #e2e8f0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.repo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: #24292e;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Screenshot */
+.screenshot-container {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.wiki-screenshot {
+    width: 100%;
+    display: block;
+}
+
+.screenshot-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
+    padding: 2rem;
+}
+
+.view-full-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    backdrop-filter: blur(10px);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .wiki-grid-preview {
+        grid-template-columns: 1fr;
+    }
+    
+    .doc-links {
+        grid-template-columns: 1fr;
+    }
+    
+    .file-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .doc-iframe {
+        height: 300px;
+    }
+}
 
 
 
