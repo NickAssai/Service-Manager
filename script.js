@@ -23,25 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification(`Открыт раздел: "${btn.textContent.trim()}"`, 'info');
         });
     });
-
-    // ====================
-    // 2. Wiki.js темы (переключение светлой/темной) - УДАЛЕНО, т.к. не нужно
-    // ====================
-
-    // ====================
-    // 3. Табы для демо-кода в Wiki.js - УДАЛЕНО, т.к. не нужно
-    // ====================
-
-    // ====================
-    // 4. Чек-листы TealPOS - УДАЛЕНО полностью
-    // ====================
-
-    // ====================
-    // 5. Интерактивный чек-лист (из кейса 3) - УДАЛЕНО, т.к. заменен на изображение
-    // ====================
     
     // ====================
-    // 6. Мобильное меню
+    // 2. Мобильное меню
     // ====================
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
@@ -66,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // ====================
-    // 7. Плавная прокрутка для якорных ссылок
+    // 3. Плавная прокрутка для якорных ссылок
     // ====================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -89,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ====================
-    // 8. Анимация при прокрутке
+    // 4. Анимация при прокрутке
     // ====================
     const observerOptions = {
         threshold: 0.1,
@@ -114,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ====================
-    // 9. Автоматическое закрытие мобильного меню при ресайзе
+    // 5. Автоматическое закрытие мобильного меню при ресайзе
     // ====================
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768 && navLinks) {
@@ -124,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ====================
-    // 10. Анимация навигации при скролле
+    // 6. Анимация навигации при скролле
     // ====================
     let lastScrollTop = 0;
     const navbar = document.getElementById('navbar');
@@ -166,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ====================
-    // 11. Уведомления
+    // 7. Уведомления
     // ====================
     function showNotification(message, type = 'info') {
         // Создаем элемент уведомления
@@ -223,12 +207,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 300);
         }, 4000);
     }
-
+    
     // ====================
-    // 12. Функции для работы с изображением (новые)
+    // 8. Масштабирование изображений
     // ====================
     
-    // Масштабирование изображения при клике
+    // Масштабирование изображения при клике (для кейса 3)
     const scrollableImages = document.querySelectorAll('.scrollable-image');
     scrollableImages.forEach(img => {
         img.addEventListener('click', function() {
@@ -246,5 +230,113 @@ document.addEventListener('DOMContentLoaded', function() {
                 img.classList.remove('zoomed');
             });
         }
+    });
+    
+    // ====================
+    // 9. Модальное окно для галереи Wiki.js
+    // ====================
+    function initGalleryModal() {
+        const exampleItems = document.querySelectorAll('#case4 .example-item');
+        
+        if (!exampleItems.length) return;
+        
+        // Создаем модальное окно, если его нет
+        if (!document.getElementById('exampleModal')) {
+            const modalHTML = `
+                <div id="exampleModal" class="example-modal">
+                    <span class="modal-close">&times;</span>
+                    <div class="modal-image-container">
+                        <img class="modal-image" src="" alt="">
+                        <div class="modal-caption">
+                            <h3></h3>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+        
+        const modal = document.getElementById('exampleModal');
+        const modalImage = modal.querySelector('.modal-image');
+        const modalCaptionTitle = modal.querySelector('.modal-caption h3');
+        const modalCaptionDesc = modal.querySelector('.modal-caption p');
+        const modalClose = modal.querySelector('.modal-close');
+        
+        // Открытие модального окна при клике на изображение
+        exampleItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                const img = this.querySelector('.example-image');
+                const title = this.querySelector('.example-caption h5').textContent;
+                const description = this.querySelector('.example-caption p').textContent;
+                
+                modalImage.src = img.src;
+                modalImage.alt = img.alt;
+                modalCaptionTitle.textContent = title;
+                modalCaptionDesc.textContent = description;
+                
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                document.body.style.paddingRight = window.innerWidth - document.documentElement.clientWidth + 'px';
+            });
+        });
+        
+        // Закрытие модального окна
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        }
+        
+        modalClose.addEventListener('click', closeModal);
+        
+        // Закрытие по клику на оверлей
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+        
+        // Закрытие по клавише Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    }
+    
+    // Инициализируем галерею
+    initGalleryModal();
+    
+    // ====================
+    // 10. Предзагрузка изображений галереи
+    // ====================
+    function preloadGalleryImages() {
+        const images = document.querySelectorAll('#case4 .example-image');
+        images.forEach(img => {
+            const tempImg = new Image();
+            tempImg.src = img.src;
+        });
+    }
+    
+    // Предзагружаем изображения при наведении на таб
+    const wikiTabBtn = document.querySelector('[data-tab="case4"]');
+    if (wikiTabBtn) {
+        wikiTabBtn.addEventListener('mouseenter', preloadGalleryImages);
+    }
+});
+
+// Управление предпросмотром документации
+document.addEventListener('DOMContentLoaded', function() {
+    // Функция для обработки загрузки iframe (если остались)
+    const frames = document.querySelectorAll('iframe');
+    frames.forEach(frame => {
+        frame.addEventListener('load', function() {
+            this.classList.add('loaded');
+        });
+        
+        frame.addEventListener('error', function() {
+            console.error('Не удалось загрузить фрейм:', this.src);
+        });
     });
 });
