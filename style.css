@@ -44,6 +44,7 @@ body {
     width: 100%;
     top: 0;
     z-index: 1000;
+    transition: transform 0.3s ease;
 }
 
 #navbar .container {
@@ -70,10 +71,22 @@ body {
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s;
+    position: relative;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a.active {
     color: var(--primary);
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary);
 }
 
 .menu-toggle {
@@ -267,295 +280,79 @@ body {
     font-size: 0.875rem;
 }
 
-/* Дополнительная информация о файлах */
-.file-info {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
+/* ==================== */
+/* Стили для изображения Копиния7 */
+/* ==================== */
 
-.file-info h4 {
-    color: white;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.file-badges {
-    display: flex;
-    gap: 0.75rem;
-    margin: 0.5rem 0;
-    flex-wrap: wrap;
-}
-
-.file-badge {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 0.375rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Контейнер предпросмотра документации */
-.doc-preview-container {
-    background: white;
-    border-radius: var(--radius);
+.image-container {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 100%;
     overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-    border: 1px solid var(--gray-light);
-    margin-bottom: 1.5rem;
+    position: relative;
 }
 
-.doc-preview-container.expanded {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 2000;
-    border-radius: 0;
-    margin: 0;
-}
-
-/* Заголовок предпросмотра */
-.preview-header {
-    background: linear-gradient(135deg, var(--dark) 0%, #334155 100%);
-    color: white;
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.preview-header h4 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 500;
+.image-container h4 {
+    color: #4cc9f0;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 10px;
 }
 
-.preview-actions {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.preview-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius);
-    font-size: 0.875rem;
-    cursor: pointer;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.2s;
-}
-
-.preview-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* Фрейм с документом */
-.doc-preview-frame {
+.scrollable-image {
     width: 100%;
-    height: 400px;
-    border: none;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     display: block;
-    background: white;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    margin: 0 auto;
+    cursor: zoom-in;
+    transition: transform 0.3s ease, max-height 0.3s ease;
 }
 
-.doc-preview-frame.loaded {
-    opacity: 1;
+.scrollable-image.zoomed {
+    cursor: zoom-out;
+    max-height: 800px;
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-.doc-preview-container.expanded .doc-preview-frame {
-    height: calc(100vh - 120px);
+.image-description {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid #4cc9f0;
 }
 
-/* Индикатор загрузки */
-.loading-indicator {
+.image-description p {
+    margin-bottom: 10px;
+    color: #e0e0ff;
+    font-size: 0.95rem;
+}
+
+.image-features {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem;
-    background: var(--light);
-    min-height: 200px;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
 }
 
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--gray-light);
-    border-top: 3px solid var(--primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.error-message {
-    text-align: center;
-    color: var(--gray);
-}
-
-.error-message i {
-    font-size: 2rem;
-    color: #ef4444;
-    margin-bottom: 1rem;
-}
-
-/* Футер предпросмотра */
-.preview-footer {
-    background: var(--light);
-    padding: 1rem 1.5rem;
-    border-top: 1px solid var(--gray-light);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.doc-stats {
-    display: flex;
-    gap: 1.5rem;
-    font-size: 0.875rem;
-    color: var(--gray);
-}
-
-.doc-stats span {
+.image-features span {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-}
-
-.download-btn {
-    background: var(--primary);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius);
-    text-decoration: none;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: background 0.2s;
-}
-
-.download-btn:hover {
-    background: var(--primary-dark);
-}
-
-/* Структура документов */
-.related-documents {
-    background: white;
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--gray-light);
-}
-
-.related-documents h4 {
-    color: var(--dark);
-    margin-bottom: 1rem;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.doc-structure {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-}
-
-.structure-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
-    background: var(--light);
-    border-radius: var(--radius);
-    border: 1px solid var(--gray-light);
-    transition: all 0.2s;
-}
-
-.structure-item:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-    transform: translateY(-2px);
-}
-
-.structure-item i {
-    color: var(--primary);
-    font-size: 1.25rem;
-}
-
-.structure-item strong {
-    display: block;
-    color: var(--dark);
-    font-size: 0.875rem;
-}
-
-.structure-item small {
-    display: block;
-    color: var(--gray);
-    font-size: 0.75rem;
-}
-
-/* Ссылка на GitHub */
-.full-structure-link {
-    text-align: center;
-}
-
-.github-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: #24292e;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius);
-    text-decoration: none;
-    font-weight: 500;
-    transition: background 0.2s;
-}
-
-.github-link:hover {
-    background: #2d3339;
-}
-
-/* Оверлей для развернутого режима */
-.preview-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1999;
-    display: none;
-}
-
-.preview-overlay.active {
-    display: block;
+    gap: 5px;
+    font-size: 0.85rem;
+    color: #a0a0c0;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px 10px;
+    border-radius: 20px;
 }
 
 /* Блок кода */
@@ -594,34 +391,47 @@ body {
     font-weight: bold;
 }
 
-.interactive-demo {
-    background: white;
-    padding: 1.5rem;
-    border-radius: var(--radius);
-    color: var(--dark);
+.wiki-structure {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.checklist {
-    margin: 1.5rem 0;
-}
-
-.checkbox {
+.structure-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-    cursor: pointer;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-.demo-btn {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-weight: 500;
-    width: 100%;
+.structure-item:hover {
+    transform: translateX(5px);
+    border-color: #4cc9f0;
+}
+
+.structure-item i {
+    font-size: 1.5rem;
+    color: #4cc9f0;
+}
+
+.structure-item div {
+    flex: 1;
+}
+
+.structure-item strong {
+    display: block;
+    color: #ffffff;
+    margin-bottom: 4px;
+    font-size: 1rem;
+}
+
+.structure-item small {
+    color: #a0a0c0;
+    font-size: 0.85rem;
 }
 
 /* Таблица соответствия */
@@ -698,34 +508,6 @@ footer {
     opacity: 0.8;
 }
 
-/* ==================== */
-/* Стили для таба Wiki.js */
-/* ==================== */
-
-/* Стили для демо Wiki.js (если нужно) */
-#case4 .wiki-demo {
-    --wiki-text-primary: #222222;
-    --wiki-text-secondary: #555555;
-    --wiki-text-muted: #777777;
-    --wiki-border-light: #e0e0e0;
-    --wiki-bg-primary: transparent;
-    --wiki-bg-card: rgba(255, 255, 255, 0.6);
-    --wiki-bg-card-hover: rgba(245, 245, 245, 0.8);
-    --wiki-link-default: #222222;
-    --wiki-link-hover: #1565c0;
-    
-    font-family: "SF Pro Display", "Segoe UI", Roboto, system-ui, sans-serif;
-    color: var(--wiki-text-secondary);
-    background: var(--wiki-bg-primary);
-    padding: 32px;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    line-height: 1.65;
-    font-size: 16px;
-}
-
-/* ... остальные стили для case4 и case5 ... */
-
 /* Адаптивность */
 @media (max-width: 768px) {
     .nav-links {
@@ -738,6 +520,7 @@ footer {
         background: white;
         padding: 1rem;
         box-shadow: var(--shadow);
+        z-index: 1000;
     }
     
     .nav-links.show {
@@ -778,34 +561,18 @@ footer {
         font-size: 2rem;
     }
     
-    /* Адаптивность для предпросмотра документации */
-    .preview-header {
+    /* Адаптивность для изображения */
+    .scrollable-image {
+        max-height: 400px;
+    }
+    
+    .image-features {
         flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
+        gap: 8px;
     }
     
-    .preview-actions {
-        justify-content: center;
-    }
-    
-    .doc-preview-frame {
-        height: 300px;
-    }
-    
-    .preview-footer {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
-    }
-    
-    .doc-stats {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .doc-structure {
-        grid-template-columns: 1fr;
+    .image-container {
+        padding: 15px;
     }
     
     .approach-grid {
@@ -815,309 +582,65 @@ footer {
     .contact-info {
         grid-template-columns: 1fr;
     }
-}
-/* ==================== */
-/* Стили для электронного чек-листа */
-/* ==================== */
-
-/* Контейнер предпросмотра */
-.preview-container {
-    background: white;
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--gray-light);
-    transition: all 0.3s ease;
-    margin-bottom: 1.5rem;
+    
+    .scrollable-image.zoomed {
+        max-height: 600px;
+    }
 }
 
-.preview-container.expanded {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 2000;
-    border-radius: 0;
-    margin: 0;
-}
-
-/* Заголовок предпросмотра */
-.preview-header {
-    background: linear-gradient(135deg, var(--dark) 0%, #334155 100%);
-    color: white;
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.preview-header h4 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.preview-actions {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.preview-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius);
-    font-size: 0.875rem;
-    cursor: pointer;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.2s;
-}
-
-.preview-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* Фрейм с чек-листом */
-.preview-frame {
-    width: 100%;
-    height: 500px;
-    border: none;
-    display: block;
-    background: white;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.preview-frame.loaded {
-    opacity: 1;
-}
-
-.preview-container.expanded .preview-frame {
-    height: calc(100vh - 120px);
-}
-
-/* Индикатор загрузки */
-.loading-indicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem;
-    background: var(--light);
-    min-height: 300px;
-}
-
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--gray-light);
-    border-top: 3px solid var(--primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.error-message {
-    text-align: center;
-    color: var(--gray);
-}
-
-.error-message i {
-    font-size: 2rem;
-    color: #ef4444;
-    margin-bottom: 1rem;
-}
-
-/* Футер предпросмотра */
-.preview-footer {
-    background: var(--light);
-    padding: 1rem 1.5rem;
-    border-top: 1px solid var(--gray-light);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.doc-stats {
-    display: flex;
-    gap: 1.5rem;
-    font-size: 0.875rem;
-    color: var(--gray);
-}
-
-.doc-stats span {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.download-btn {
-    background: var(--primary);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius);
-    text-decoration: none;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: background 0.2s;
-}
-
-.download-btn:hover {
-    background: var(--primary-dark);
-}
-
-/* Особенности чек-листа */
-.checklist-features {
-    background: white;
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--gray-light);
-}
-
-.checklist-features h4 {
-    color: var(--dark);
-    margin-bottom: 1rem;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
-    background: var(--light);
-    border-radius: var(--radius);
-    border: 1px solid var(--gray-light);
-    transition: all 0.2s;
-}
-
-.feature-item:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-    transform: translateY(-2px);
-}
-
-.feature-item i {
-    color: var(--primary);
-    font-size: 1.25rem;
-    min-width: 24px;
-}
-
-.feature-item strong {
-    display: block;
-    color: var(--dark);
-    font-size: 0.875rem;
-    margin-bottom: 0.25rem;
-}
-
-.feature-item small {
-    display: block;
-    color: var(--gray);
-    font-size: 0.75rem;
-}
-
-/* Ссылка на другие инструменты */
-.other-tools {
-    text-align: center;
-    padding-top: 1rem;
-    border-top: 1px solid var(--gray-light);
-}
-
-.tools-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--secondary);
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s;
-}
-
-.tools-link:hover {
-    background: #6d28d9;
-    transform: translateY(-2px);
-}
-
-/* Оверлей для развернутого режима */
-.preview-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1999;
-    display: none;
-}
-
-.preview-overlay.active {
-    display: block;
-}
-
-/* Адаптивность для чек-листа */
-@media (max-width: 768px) {
-    .preview-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
-        text-align: center;
+@media (max-width: 480px) {
+    .scrollable-image {
+        max-height: 300px;
     }
     
-    .preview-actions {
-        justify-content: center;
+    .scrollable-image.zoomed {
+        max-height: 400px;
     }
     
-    .preview-frame {
-        height: 400px;
-    }
-    
-    .preview-footer {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
-        text-align: center;
-    }
-    
-    .doc-stats {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .features-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .feature-item {
+    .case-content {
         padding: 1rem;
     }
+    
+    .tab-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Уведомления */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+    font-weight: 500;
+    color: white;
+}
+
+.notification.success {
+    background: #10b981;
+}
+
+.notification.info {
+    background: #3b82f6;
+}
+
+.notification.warning {
+    background: #f59e0b;
+}
+
+.notification.error {
+    background: #ef4444;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
