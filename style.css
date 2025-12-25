@@ -28,6 +28,7 @@ body {
     line-height: 1.6;
     color: #334155;
     background-color: var(--light);
+    overflow-x: hidden;
 }
 
 .container {
@@ -191,6 +192,11 @@ body {
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.approach-card:hover {
+    transform: translateY(-5px);
 }
 
 .approach-icon {
@@ -221,11 +227,16 @@ body {
     border-radius: var(--radius);
     cursor: pointer;
     font-weight: 500;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
 }
 
 .tab-btn.active {
     background: var(--primary);
+    transform: translateY(-2px);
+}
+
+.tab-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .tab-content {
@@ -234,14 +245,15 @@ body {
 
 .tab-content.active {
     display: block;
-    animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s ease;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
+/* Контейнеры кейсов */
 .case-content {
     background: rgba(255, 255, 255, 0.05);
     border-radius: var(--radius);
@@ -255,6 +267,7 @@ body {
 .case-text h3 {
     margin-bottom: 1rem;
     color: white;
+    font-size: 1.5rem;
 }
 
 .case-text ul {
@@ -281,7 +294,7 @@ body {
 }
 
 /* ==================== */
-/* Стили для изображения Копиния7 */
+/* Стили для изображения в кейсе 3 */
 /* ==================== */
 
 .image-container {
@@ -291,7 +304,6 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
     max-width: 100%;
     overflow: hidden;
-    position: relative;
 }
 
 .image-container h4 {
@@ -313,7 +325,11 @@ body {
     display: block;
     margin: 0 auto;
     cursor: zoom-in;
-    transition: transform 0.3s ease, max-height 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.scrollable-image:hover {
+    border-color: #4cc9f0;
 }
 
 .scrollable-image.zoomed {
@@ -355,6 +371,175 @@ body {
     border-radius: 20px;
 }
 
+/* ==================== */
+/* Стили для галереи примеров Wiki.js */
+/* ==================== */
+
+.examples-gallery {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.examples-gallery h4 {
+    color: #4cc9f0;
+    margin-bottom: 24px;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.example-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: pointer;
+}
+
+.example-item:hover {
+    transform: translateY(-4px);
+    border-color: rgba(76, 201, 240, 0.4);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.example-image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: #1a1a2e;
+}
+
+.example-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+}
+
+.example-item:hover .example-image {
+    transform: scale(1.05);
+}
+
+.example-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(26, 26, 46, 0.9), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+}
+
+.example-item:hover .example-overlay {
+    opacity: 1;
+}
+
+.example-info {
+    color: white;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.example-item:hover .example-info {
+    transform: translateY(0);
+}
+
+.example-info h5 {
+    margin-bottom: 4px;
+    font-size: 1rem;
+}
+
+.example-info p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.example-caption {
+    padding: 16px;
+    background: rgba(26, 26, 46, 0.8);
+}
+
+.example-number {
+    display: inline-block;
+    background: linear-gradient(135deg, #4cc9f0, #4361ee);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 32px;
+    font-weight: bold;
+    font-size: 0.875rem;
+    margin-bottom: 12px;
+}
+
+.example-caption h5 {
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.example-caption p {
+    color: #a0a0c0;
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+/* Статистика */
+.examples-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item {
+    text-align: center;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-2px);
+    background: rgba(76, 201, 240, 0.1);
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4cc9f0;
+    margin-bottom: 8px;
+    line-height: 1;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.875rem;
+    color: #a0a0c0;
+}
+
 /* Блок кода */
 .code-block {
     background: #1e293b;
@@ -367,8 +552,15 @@ body {
     margin: 0;
     color: #e2e8f0;
     font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
 
+.code-block code {
+    font-family: 'Courier New', monospace;
+}
+
+/* Диаграмма BPMN */
 .bpmn-demo {
     display: flex;
     align-items: center;
@@ -379,18 +571,26 @@ body {
 
 .bpmn-step {
     background: var(--primary);
+    color: white;
     padding: 1rem;
     border-radius: var(--radius);
     min-width: 120px;
     text-align: center;
     font-weight: 500;
+    transition: transform 0.3s ease;
+}
+
+.bpmn-step:hover {
+    transform: scale(1.05);
 }
 
 .bpmn-arrow {
     color: var(--gray);
     font-weight: bold;
+    font-size: 1.5rem;
 }
 
+/* Структура Wiki.js */
 .wiki-structure {
     display: flex;
     flex-direction: column;
@@ -405,17 +605,19 @@ body {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .structure-item:hover {
     transform: translateX(5px);
     border-color: #4cc9f0;
+    background: rgba(76, 201, 240, 0.1);
 }
 
 .structure-item i {
     font-size: 1.5rem;
     color: #4cc9f0;
+    min-width: 30px;
 }
 
 .structure-item div {
@@ -430,6 +632,7 @@ body {
 }
 
 .structure-item small {
+    display: block;
     color: #a0a0c0;
     font-size: 0.85rem;
 }
@@ -446,6 +649,11 @@ body {
     display: grid;
     grid-template-columns: 1fr 2fr;
     border-bottom: var(--border);
+    transition: background 0.3s ease;
+}
+
+.table-row:hover {
+    background: #f8fafc;
 }
 
 .table-row.header {
@@ -453,8 +661,14 @@ body {
     color: white;
 }
 
+.table-row.header:hover {
+    background: var(--primary-dark);
+}
+
 .table-cell {
     padding: 1rem;
+    display: flex;
+    align-items: center;
 }
 
 /* Контакты */
@@ -469,11 +683,21 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius);
+    transition: transform 0.3s ease;
+}
+
+.contact-item:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .contact-item i {
     font-size: 1.5rem;
     color: var(--primary);
+    min-width: 40px;
 }
 
 .source-note {
@@ -506,9 +730,143 @@ footer {
 .footer-note {
     margin-top: 1rem;
     opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+/* ==================== */
+/* Модальное окно для галереи */
+/* ==================== */
+
+.example-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.example-modal.active {
+    display: flex;
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-image-container {
+    max-width: 90%;
+    max-height: 90%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-close {
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    z-index: 2001;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    color: #4cc9f0;
+    transform: scale(1.1);
+}
+
+.modal-caption {
+    margin-top: 20px;
+    text-align: center;
+    color: white;
+    max-width: 800px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.modal-caption h3 {
+    margin-bottom: 10px;
+    color: #4cc9f0;
+    font-size: 1.5rem;
+}
+
+.modal-caption p {
+    color: #a0a0c0;
+    font-size: 1rem;
+}
+
+/* Уведомления */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+    font-weight: 500;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notification.success {
+    background: #10b981;
+}
+
+.notification.info {
+    background: #3b82f6;
+}
+
+.notification.warning {
+    background: #f59e0b;
+}
+
+.notification.error {
+    background: #ef4444;
 }
 
 /* Адаптивность */
+@media (max-width: 1024px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+}
+
 @media (max-width: 768px) {
     .nav-links {
         display: none;
@@ -531,26 +889,22 @@ footer {
         display: block;
     }
     
+    .hero {
+        padding: 6rem 0 4rem;
+    }
+    
     .hero h1 {
         font-size: 2rem;
+    }
+    
+    .subtitle {
+        font-size: 1.1rem;
     }
     
     .case-content {
         grid-template-columns: 1fr;
         gap: 2rem;
-    }
-    
-    .table-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .hero-tags {
-        gap: 0.5rem;
-    }
-    
-    .tag {
-        font-size: 0.875rem;
-        padding: 0.25rem 0.75rem;
+        padding: 1.5rem;
     }
     
     .section {
@@ -559,6 +913,7 @@ footer {
     
     .section-title {
         font-size: 2rem;
+        margin-bottom: 2rem;
     }
     
     /* Адаптивность для изображения */
@@ -577,18 +932,88 @@ footer {
     
     .approach-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
     
     .contact-info {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
     
     .scrollable-image.zoomed {
         max-height: 600px;
     }
+    
+    /* Галерея */
+    .examples-gallery {
+        padding: 20px;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+    }
+    
+    .example-image-container {
+        height: 180px;
+    }
+    
+    .examples-stats {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .stat-item {
+        padding: 12px;
+    }
+    
+    .stat-number {
+        font-size: 1.75rem;
+    }
+    
+    /* Модальное окно */
+    .modal-close {
+        top: 15px;
+        right: 20px;
+        font-size: 30px;
+    }
+    
+    .modal-caption {
+        padding: 15px;
+    }
+    
+    .modal-caption h3 {
+        font-size: 1.2rem;
+    }
+    
+    .table-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .table-cell {
+        padding: 0.75rem;
+    }
 }
 
 @media (max-width: 480px) {
+    .hero h1 {
+        font-size: 1.75rem;
+    }
+    
+    .hero-tags {
+        gap: 0.5rem;
+    }
+    
+    .tag {
+        font-size: 0.875rem;
+        padding: 0.25rem 0.75rem;
+    }
+    
+    .cta-button {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    
     .scrollable-image {
         max-height: 300px;
     }
@@ -605,42 +1030,90 @@ footer {
         padding: 0.5rem 1rem;
         font-size: 0.875rem;
     }
+    
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .example-image-container {
+        height: 200px;
+    }
+    
+    .examples-gallery h4 {
+        font-size: 1.1rem;
+    }
+    
+    .approach-card {
+        padding: 1.5rem;
+    }
+    
+    .modal-close {
+        top: 10px;
+        right: 15px;
+        font-size: 25px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .modal-caption {
+        margin-top: 15px;
+        padding: 10px;
+    }
+    
+    .modal-caption h3 {
+        font-size: 1rem;
+    }
+    
+    .modal-caption p {
+        font-size: 0.9rem;
+    }
 }
 
-/* Уведомления */
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 12px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 9999;
-    transform: translateX(120%);
-    transition: transform 0.3s ease;
-    max-width: 300px;
-    font-weight: 500;
-    color: white;
+/* Плавные переходы для изображений */
+.example-image,
+.scrollable-image,
+.modal-image {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.notification.success {
-    background: #10b981;
+/* Улучшенная фокус-видимость для доступности */
+.tab-btn:focus,
+.cta-button:focus,
+.menu-toggle:focus,
+.nav-links a:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 
-.notification.info {
-    background: #3b82f6;
-}
-
-.notification.warning {
-    background: #f59e0b;
-}
-
-.notification.error {
-    background: #ef4444;
-}
-
-.notification-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* Оптимизация для печати */
+@media print {
+    .nav-links,
+    .menu-toggle,
+    .cta-button,
+    .tab-btn,
+    .notification {
+        display: none !important;
+    }
+    
+    #navbar {
+        position: static;
+        box-shadow: none;
+    }
+    
+    .hero {
+        margin-top: 0;
+        background: none !important;
+        color: black;
+        padding: 2rem 0;
+    }
+    
+    .section {
+        padding: 2rem 0;
+        break-inside: avoid;
+    }
+    
+    .scrollable-image.zoomed {
+        max-height: none !important;
+        transform: none !important;
+    }
 }
